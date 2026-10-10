@@ -1,0 +1,65 @@
+name: Build & Release Windows App (tvbox_win)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [windows]
+    tags:
+      - "windows-v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build TVBoxOSC Windows exe
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: pip-${{ runner.os }}-${{ hashFiles('windows-app/requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-
+
+      - name: Install dependencies
+        working-directory: windows-app
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Smoke test (import + instantiate)
+        working-directory: windows-app
+        run: |
+          python -c "import tvbox_win, tvbox_win.crawler, tvbox_win.parser, tvbox_win.models, tvbox_win.config, tvbox_win.ui.main_window, tvbox_win.ui.detail_dialog, tvbox_win.ui.player_dialog, tvbox_win.ui.source_dialog; from tvbox_win.ui.main_window import MainWindow; print('IMPORTS_OK')"
+
+      - name: Build exe (PyInstaller)
+        working-directory: windows-app
+        run: |
+          python -m PyInstaller --noconfirm --clean --onefile --windowed ^
+            --name TVBoxOSC ^
+            --collect-all tvbox_win ^
+            --collect-all PySide6 ^
+            build_entry.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TVBoxOSC-Windows
+          path: windows-app/dist/TVBoxOSC.exe
+
+      - name: Create Release (tag only)
+        if: startsWith(github.ref, 'refs/tags/windows-v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: TVBoxOSC ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: windows-app/dist/TVBoxOSC.exe
+          generate_release_notes: true

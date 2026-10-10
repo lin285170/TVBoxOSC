@@ -1,0 +1,6 @@
+# PySide6 for the TVBoxOSC Windows desktop app
+PySide6>=6.6.0
+# localized requests for config fetch
+requests>=2.31.0
+# packaging: used for optional 打包 (pyinstaller) helpers
+packaging>=23.0
