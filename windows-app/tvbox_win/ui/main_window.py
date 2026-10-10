@@ -18,75 +18,51 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ..crawler import (
-    fetch_bytes,
-    fetch_classes,
-    fetch_detail,
-    fetch_text,
-    fetch_vods,
-    load_config,
-    normalize_url,
-    resolve_play_url,
-)
-from ..models import SourceBean, VodInfo, VodResult
+from .. import crawler as crawl
 from .detail_dialog import DetailDialog
 from .player_dialog import PlayerDialog
 from .source_dialog import SourceDialog
 
-log = logging.getLogger(__name__)
-
-POSTER_W = 220
-POSTER_H = 320
-
 
 class _PageWorker(QThread):
-    """Fetch a page of vods + their poster images on a background thread."""
+    """Fetch a page of content + poster images on a background thread."""
 
-    done = Signal(object)  # List[Tuple[VodInfo, Optional[bytes]]]
+    done = Signal(list)  # List[Tuple[VodInfo, Optional[bytes]]]
 
-    def __init__(self, source: SourceBean, page: int, wd: str, t: str) -> None:
+    def __init__(self, source, page: int, wd: str, t: str) -> None:
         super().__init__()
-        self._s = source
+        self._src = source
         self._page = page
         self._wd = wd
         self._t = t
 
     def run(self) -> None:  # noqa: D102
         try:
-            res: VodResult = fetch_vods(self._s, page=self._page, wd=self._wd, t=self._t)
-            items: List[tuple] = []
-            from concurrent.futures import ThreadPoolExecutor
-
-            vods = res.vods
-            with ThreadPoolExecutor(max_workers=6) as ex:
-                futures = {}
-                for v in vods:
-                    if v.vod_pic and v.vod_pic.startswith("http"):
-                        futures[ex.submit(fetch_bytes, v.vod_pic)] = v
-                for fut, v in list(futures.items()):
+            res = crawl.fetch_vods(self._src, page=self._page, wd=self._wd, t=self._t)
+            items: list = []
+            for vod in res.vods:
+                pic = None
+                if vod.vod_pic and vod.vod_pic.startswith("http"):
                     try:
-                        items.append((v, fut.result()))
+                        pic = crawl.fetch_bytes(vod.vod_pic)
                     except Exception:  # noqa: BLE001
-                        items.append((v, None))
-                for v in vods:
-                    if not (v.vod_pic and v.vod_pic.startswith("http")):
-                        items.append((v, None))
+                        pic = None
+                items.append((vod, pic))
             self.done.emit(items)
-        except Exception as e:  # noqa: BLE001
-            log.warning("加载内容失败: %s", e)
+        except Exception:  # noqa: BLE001
             self.done.emit([])
 
 
 class MainWindow(QMainWindow):
     """Top-level window for the TVBoxOSC Windows app."""
 
-    def __init__(self, cfg) -> None:  # cfg: ConfigManager
+    def __init__(self, cfg) -> None:
         super().__init__()
         self.cfg = cfg
-        self.current_source: Optional[SourceBean] = None
-        self.current_wd: str = ""
-        self.current_t: str = ""
-        self.current_page: int = 1
+        self.current_source = None
+        self.current_page = 1
+        self.current_wd = ""
+        self.current_t = ""
         self._worker: Optional[_PageWorker] = None
 
         self.setWindowTitle("TVBoxOSC for Windows")
@@ -94,13 +70,12 @@ class MainWindow(QMainWindow):
         self._build()
         self._apply_config()
 
-    # ---- 构建 ----
     def _build(self) -> None:
         central = QWidget()
         layout = QVBoxLayout(central)
         layout.setContentsMargins(8, 8, 8, 8)
 
-        # 顶部：接口配置 + 加载 + 来源选择 + 来源管理
+        # 顶部：接口配置 + 来源 + 加载 + 管理
         top = QHBoxLayout()
         self.api_edit = QLineEdit()
         self.api_edit.setPlaceholderText("粘贴接口配置地址 (http:// 或 https://…)")
@@ -145,7 +120,7 @@ class MainWindow(QMainWindow):
         self.grid.setViewMode(QListWidget.IconMode)
         self.grid.setResizeMode(QListWidget.Adjust)
         self.grid.setMovement(QListWidget.Static)
-        self.grid.setIconSize(QSize(POSTER_W, POSTER_H))
+        self.grid.setIconSize(QSize(200, 280))
         self.grid.setUniformItemSizes(True)
         self.grid.setSpacing(12)
         self.grid.itemDoubleClicked.connect(self._on_item_double)
@@ -168,23 +143,16 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "提示", "请输入接口配置地址")
             return
         self.statusBar().showMessage("正在加载接口配置…")
-        self.setEnabled(False)
         try:
-            sources = self.cfg.fetch_config(url)
+            self.cfg.fetch_config(url)
         except Exception as e:  # noqa: BLE001
-            self.setEnabled(True)
-            QMessageBox.critical(self, "加载失败", str(e))
             self.statusBar().showMessage("加载失败")
+            QMessageBox.critical(self, "加载失败", str(e))
             return
-        self.setEnabled(True)
         self._refresh_sources()
-        self.statusBar().showMessage(f"加载成功：{len(sources)} 个来源")
+        self.statusBar().showMessage(f"加载成功：{len(self.cfg.sources)} 个来源")
         if self.source_combo.count():
             self.source_combo.setCurrentIndex(0)
-        elif self.source_combo.count() == 0:
-            self.current_source = None
-            self.grid.clear()
-            self.statusBar().showMessage("配置中没有启用的来源")
 
     def _refresh_sources(self) -> None:
         self.source_combo.blockSignals(True)
@@ -195,16 +163,16 @@ class MainWindow(QMainWindow):
         self.source_combo.blockSignals(False)
         if self.source_combo.count():
             self.source_combo.setCurrentIndex(0)
-        else:
-            self.current_source = None
-            self.grid.clear()
 
     def _on_source_changed(self) -> None:
         key = self.source_combo.currentData()
-        self.current_source = self.cfg.get_source(key) if key else None
+        if not key:
+            self.current_source = None
+            return
+        self.current_source = self.cfg.get_source(key)
+        self.current_page = 1
         self.current_wd = ""
         self.current_t = ""
-        self.current_page = 1
         self._load_page()
 
     def _on_manage_sources(self) -> None:
@@ -239,33 +207,31 @@ class MainWindow(QMainWindow):
     def _load_page(self) -> None:
         if not self.current_source:
             return
-        src = self.current_source
         self.grid.clear()
         self.statusBar().showMessage(f"正在加载第 {self.current_page} 页…")
-        self._worker = _PageWorker(src, self.current_page, self.current_wd, self.current_t)
+        self._worker = _PageWorker(self.current_source, self.current_page, self.current_wd, self.current_t)
         self._worker.done.connect(self._on_page_done)
         self._worker.start()
 
-    def _on_page_done(self, items: List) -> None:
+    def _on_page_done(self, items: list) -> None:
         self.grid.clear()
-        for vod, data in items:
+        for vod, pic in items:
             item = QListWidgetItem()
             item.setText(vod.vod_name)
-            pm = None
-            if data:
+            item.setData(Qt.UserRole, vod)
+            if pic:
                 pm = QPixmap()
-                if pm.loadFromData(data):
-                    item.setIcon(QIcon(pm.scaled(POSTER_W, POSTER_H, Qt.KeepAspectRatio, Qt.SmoothTransformation)))
+                if pm.loadFromData(pic):
+                    item.setIcon(QIcon(pm.scaled(200, 280, Qt.KeepAspectRatio, Qt.SmoothTransformation)))
             if vod.vod_remarks:
                 item.setText(f"{vod.vod_name}\n{vod.vod_remarks}")
-            item.setData(Qt.UserRole, vod)
-            item.setSizeHint(QSize(POSTER_W + 12, POSTER_H + 44))
+            item.setSizeHint(QSize(212, 324))
             self.grid.addItem(item)
         self.page_label.setText(f"第 {self.current_page} 页   {len(items)} 条")
         self.statusBar().showMessage(f"加载完成：{len(items)} 条")
 
     def _on_item_double(self, item: QListWidgetItem) -> None:
-        vod: VodInfo = item.data(Qt.UserRole)
+        vod = item.data(Qt.UserRole)
         if not vod or not self.current_source:
             return
         dlg = DetailDialog(self, self.current_source, vod)
