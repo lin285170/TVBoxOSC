@@ -32,7 +32,7 @@ from tvbox_win import crawler  # noqa: E402
 from tvbox_win.js_bridge import find_host_js, find_node, get_js_runtime, shutdown_js_runtime  # noqa: E402
 from tvbox_win.models import SourceBean  # noqa: E402
 
-SITE_ROOT = os.path.normpath(os.path.join(APP_DIR, "..", "..", "toolchain", "xpath-e2e"))
+SITE_ROOT = os.path.join(APP_DIR, "tests", "fixtures", "site")
 PORT = 8933
 BASE = f"http://127.0.0.1:{PORT}"
 

@@ -40,7 +40,7 @@ from tvbox_win.models import SourceBean  # noqa: E402
 from tvbox_win.spider_bridge import find_java, find_spider_jar, get_runtime, shutdown_runtime  # noqa: E402
 
 # 复用 toolchain 里的 XPath 测试站（test.html + detail/1001.html）
-SITE_ROOT = os.path.normpath(os.path.join(APP_DIR, "..", "..", "toolchain", "xpath-e2e"))
+SITE_ROOT = os.path.join(APP_DIR, "tests", "fixtures", "site")
 PORT = 8932
 BASE = f"http://127.0.0.1:{PORT}"
 

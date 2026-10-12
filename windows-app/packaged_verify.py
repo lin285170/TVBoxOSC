@@ -30,7 +30,7 @@ sys.path.insert(0, APP_DIR)
 from tvbox_win.js_bridge import JsRuntime          # noqa: E402
 from tvbox_win.spider_bridge import SpiderRuntime  # noqa: E402
 
-SITE_ROOT = os.path.normpath(os.path.join(APP_DIR, "..", "..", "toolchain", "xpath-e2e"))
+SITE_ROOT = os.path.join(APP_DIR, "tests", "fixtures", "site")
 BASE = "http://127.0.0.1:8934"
 RESULT, FAILURES = {}, []
 
