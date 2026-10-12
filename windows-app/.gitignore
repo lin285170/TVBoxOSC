@@ -10,6 +10,12 @@ dist/
 *.spec
 installer/output/
 
+# spider 运行时（Python/CI 侧不重编译 Java，直接使用预构建 jar）
+spider-runtime/build/
+!spider-runtime/dist/
+spider-runtime/dist/*
+!spider-runtime/dist/spider-runtime.jar
+
 # 本地配置
 .local/
 tvbox_win_settings.json

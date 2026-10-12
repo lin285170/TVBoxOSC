@@ -72,6 +72,34 @@ def parse_config_text(text: str) -> dict:
     return data
 
 
+def normalize_ext(value) -> str:
+    """把配置里的 `ext` 规整为蜘蛛可解析的字符串。
+
+    `ext` 有三种形态：字符串、内联 JSON 对象、null。CatVod spider 的
+    `init(context, String extend)` 期望拿到 JSON 文本，因此这里对 dict/list
+    做 JSON 序列化——直接用 `str()` 会产出 `{'a': 1}` 这种非法 JSON。
+    """
+    if value is None:
+        return ""
+    if isinstance(value, (dict, list)):
+        try:
+            return json.dumps(value, ensure_ascii=False)
+        except Exception:  # noqa: BLE001
+            return ""
+    text = str(value).strip()
+    if not text or text in ("None", "null"):
+        return ""
+    return text
+
+
+def _to_bool(value, default: bool = True) -> bool:
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() not in ("0", "false", "no", "off", "")
+
+
 def build_sources(cfg: dict) -> List[SourceBean]:
     """Convert a parsed 接口配置 dict into SourceBean objects."""
     sources: List[SourceBean] = []
@@ -87,7 +115,10 @@ def build_sources(cfg: dict) -> List[SourceBean]:
             quickSearch=int(item.get("quickSearch", 1) or 1),
             filterable=int(item.get("filterable", 1) or 1),
             playerUrl=str(item.get("playerUrl", "")).strip(),
-            ext=str(item.get("ext", "")).strip(),
+            ext=normalize_ext(item.get("ext")),
+            # `active: false`（TVBox 未定义，本应用扩展）用于把当前不可用的源
+            # 留在配置里备查，但不在来源下拉中展示。
+            active=_to_bool(item.get("active", True)),
         )
         if sb.key:
             sources.append(sb)

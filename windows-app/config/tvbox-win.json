@@ -1,0 +1,1560 @@
+{
+  "_comment": "Windows 桌面版等效配置。原配置 99 个源均依赖私有加固 jar（csp_*Guard），在 x86_64 Windows 上无法还原；此处改用官方 CatVodTVSpider 的 XPath 规则源 + 公开 HTTP 接口源，均为本应用可实际驱动的类型。原始加固源已保留并标记 active=false，便于日后启用。",
+  "wallpaper": "https://www.loliapi.com/acg/",
+  "logo": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaFile/3CEAE9E_773_wexfnw_20250911190012684newMediaFile.gif",
+  "spider": "https://github.com/lin285170/TVBoxOSC/releases/latest/download/spider-runtime.jar",
+  "sites": [
+    {
+      "key": "dyttzy",
+      "name": "电影天堂资源",
+      "api": "https://caiji.dyttzyapi.com/api.php/provide/vod/",
+      "type": 1,
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "heimuer",
+      "name": "黑木耳资源",
+      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+      "type": 1,
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "ffzy",
+      "name": "非凡资源",
+      "api": "http://cj.ffzyapi.com/api.php/provide/vod/",
+      "type": 1,
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "xpath-4kyu",
+      "name": "4K鸭 · 4K影视",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"author\": \"zhao xiaoyun\", \"ua\": \"\", \"homeUrl\": \"https://4kyu.cc\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://4kyu.cc/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class,'myui-header__menu')]/li/a[contains(@href, 'vodtype') and not(contains(@href,'label'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodtype/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//li[contains(@class, 'col-lg-8')]/div/a[contains(@class,'myui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/voddetail/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateUrl\": \"https://4kyu.cc/vodtype/{cateId}-{catePg}.html\", \"cateVodNode\": \"//li[contains(@class, 'col-lg-7')]/div/a[contains(@class,'myui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/voddetail/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"dtUrl\": \"https://4kyu.cc/voddetail/{vid}.html\", \"dtNode\": \"//body\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtMark\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '更新')]/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/vodplay/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://4kyu.cc/vodplay/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://4kyu.cc/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-555",
+      "name": "555电影",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "{\"author\": \"zhao xiaoyun\", \"ua\": \"\", \"homeUrl\": \"https://www.o8tv.com\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.o8tv.com/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class, 'myui-header__menu')]/li/a[contains(@href, 'vodtype')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodtype(\\\\S+).html\", \"cateManual\": {\"电影\": \"1\", \"连续剧\": \"2\", \"综艺\": \"3\", \"动漫\": \"4\", \"纪录片\": \"91\"}, \"homeVodNode\": \"//ul[contains(@class, 'myui-vodlist')]/li/div[contains(@class, 'myui-vodlist__box')]\", \"homeVodName\": \"/a/@title\", \"homeVodId\": \"/a/@href\", \"homeVodIdR\": \"/vodplay(\\\\S+).html\", \"homeVodImg\": \"/a/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://www.o8tv.com/vodshow/{cateId}--------{catePg}---2021.html\", \"cateVodNode\": \"//ul[contains(@class, 'myui-vodlist')]/li/div[contains(@class, 'myui-vodlist__box')]\", \"cateVodName\": \"/div/h4/a/@title\", \"cateVodId\": \"/div/h4/a//@href\", \"cateVodIdR\": \"/vodplay(\\\\S+).html\", \"cateVodImg\": \"/a/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://www.o8tv.com/voddetail/{vid}.html\", \"dtNode\": \"//div[contains(@class,'col-lg-wide-75')]\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/vodplay/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.o8tv.com/vodplay/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://www.o8tv.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-94sm",
+      "name": "94神马",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.40mdd.com\", \"cateNode\": \"//ul[contains(@class,'navbar-nav')]/li/a[contains(@href, '.html') and not(contains(@href, '6'))]\", \"cateName\": \"/text()\", \"cateNameR\": \"热门(.+)\", \"cateId\": \"/@href\", \"cateIdR\": \"/type/(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[@class='col-md-12 movie-item-out']//a[not(contains(@href, '6'))]/parent::*/parent::*/parent::*/div[contains(@class, 'movie-item-out') and position()<10]/div[@class='movie-item']/a\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/show/(\\\\w+).html\", \"homeVodImg\": \"/img/@src\", \"homeVodMark\": \"/button/text()\", \"cateUrl\": \"https://www.40mdd.com/type/{cateId}/{catePg}.html\", \"cateVodNode\": \"//div[@class='movie-item']/a\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/show/(\\\\w+).html\", \"cateVodImg\": \"/img/@src\", \"cateVodMark\": \"/button/text()\", \"dtUrl\": \"https://www.40mdd.com/show/{vid}.html\", \"dtNode\": \"//div[@class='container-fluid']\", \"dtName\": \"//div[@class='col-md-9']//div[@class='col-md-4']//img/@alt\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='col-md-9']//div[@class='col-md-4']//img/@src\", \"dtImgR\": \"\", \"dtCate\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '类型')]/parent::*/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '日期')]/parent::*/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '国家')]/parent::*/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '状态')]/parent::*/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '主演')]/parent::*/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '导演')]/parent::*/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//p[@class='summary']/text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[contains(@class,'resource-list')]/div[@class='panel-heading']/strong\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\\\\S+\\\\.(\\\\S+) \\\\(\", \"dtUrlNode\": \"//div[contains(@class,'resource-list')]/ul[@class='dslist-group']\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/play/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.40mdd.com/play/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://www.40mdd.com/search?wd={wd}\", \"scVodNode\": \"//div[@class='movie-item']/a\", \"scVodName\": \"/@title\", \"scVodId\": \"/@href\", \"scVodIdR\": \"/show/(\\\\w+).html\", \"scVodImg\": \"/img/@src\", \"scVodMark\": \"/button/text()\"}"
+    },
+    {
+      "key": "xpath-agefans",
+      "name": "Age动漫",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.agefans.cc/update\", \"cateManual\": {\"全部\": \"\", \"中国\": \"-中国-all-all\", \"日本\": \"-日本-all-all\", \"欧美\": \"-欧美-all-all\"}, \"homeVodNode\": \"//div[@class='blockcontent']//ul[@class='ul_li_a6']/li\", \"homeVodName\": \"/h4[@class='anime_icon2_name']/a/text()\", \"homeVodId\": \"/h4[@class='anime_icon2_name']/a/@href\", \"homeVodIdR\": \"/detail/(\\\\w+)\", \"homeVodImg\": \"//img/@src\", \"homeVodMark\": \"//img/@title\", \"cateUrl\": \"https://www.agefans.cc/catalog/all-all-all-all-all-time-{catePg}{cateId}\", \"cateVodNode\": \"//div[@class='blockcontent1']/div/a\", \"cateVodName\": \"/img/@alt\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/detail/(\\\\w+)\", \"cateVodImg\": \"/img/@src\", \"cateVodMark\": \"/span[@class='newname']/text()\", \"dtUrl\": \"https://www.agefans.cc/detail/{vid}\", \"dtNode\": \"//div[@id='container']\", \"dtName\": \"//div[@class='div_left']/div[@class='baseblock'][1]/div[@class='blockcontent']/img/@alt\", \"dtImg\": \"//div[@class='div_left']/div[@class='baseblock'][1]/div[@class='blockcontent']/img/@src\", \"dtCate\": \"//div[@class='div_left']/div[@class='baseblock'][2]//span[@class='detail_imform_tag' and contains(text(), '剧情类型')]/following-sibling::*/text()\", \"dtYear\": \"//div[@class='div_left']/div[@class='baseblock'][2]//span[@class='detail_imform_tag' and contains(text(), '首播时间')]/following-sibling::*/text()\", \"dtArea\": \"//div[@class='div_left']/div[@class='baseblock'][2]//span[@class='detail_imform_tag' and contains(text(), '地区')]/following-sibling::*/text()\", \"dtMark\": \"\", \"dtDirector\": \"//div[@class='div_left']/div[@class='baseblock'][2]//span[@class='detail_imform_tag' and contains(text(), '制作公司')]/following-sibling::*/text()\", \"dtDesc\": \"//div[@class='div_right']/div[@class='baseblock'][2]//p/text()\", \"dtFromNode\": \"//div[@id='playlist-div']/ul[@class='menu0']/li\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//div[@id='playlist-div']/div[@class='main0']/div\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/play/(\\\\S+)\", \"dtUrlName\": \"/text()\", \"playUrl\": \"https://www.agefans.cc/play/{playUrl}\", \"playUa\": \"\", \"searchUrl\": \"https://www.agefans.cc/search?query={wd}&page=1\", \"scVodNode\": \"//div[@class='blockcontent1']/div/a\", \"scVodName\": \"/img/@alt\", \"scVodId\": \"/@href\", \"scVodIdR\": \"/detail/(\\\\w+)\", \"scVodImg\": \"/img/@src\", \"scVodMark\": \"/span[@class='newname']/text()\"}"
+    },
+    {
+      "key": "xpath-bde4",
+      "name": "哔嘀影视",
+      "type": 3,
+      "api": "csp_XPathBde4",
+      "searchable": 0,
+      "quickSearch": 0,
+      "filterable": 1,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.mp4er.cc\", \"decodeTk\": \"填上猫大解密接口的口令，注意保密\", \"cateManual\": {\"全部\": \"*\", \"电影\": \"0\", \"电视剧\": \"1\"}, \"filter\": {\"*\": [{\"key\": \"s\", \"name\": \"类型\", \"value\": [{\"n\": \"全部\", \"v\": \"all\"}, {\"n\": \"动作\", \"v\": \"dongzuo\"}, {\"n\": \"爱情\", \"v\": \"aiqing\"}, {\"n\": \"喜剧\", \"v\": \"xiju\"}, {\"n\": \"科幻\", \"v\": \"kehuan\"}, {\"n\": \"恐怖\", \"v\": \"kongbu\"}, {\"n\": \"战争\", \"v\": \"zhanzheng\"}, {\"n\": \"武侠\", \"v\": \"wuxia\"}, {\"n\": \"魔幻\", \"v\": \"mohuan\"}, {\"n\": \"剧情\", \"v\": \"juqing\"}, {\"n\": \"动画\", \"v\": \"donghua\"}, {\"n\": \"惊悚\", \"v\": \"jingsong\"}, {\"n\": \"3D\", \"v\": \"3D\"}, {\"n\": \"灾难\", \"v\": \"zainan\"}, {\"n\": \"悬疑\", \"v\": \"xuanyi\"}, {\"n\": \"警匪\", \"v\": \"jingfei\"}, {\"n\": \"文艺\", \"v\": \"wenyi\"}, {\"n\": \"青春\", \"v\": \"qingchun\"}, {\"n\": \"冒险\", \"v\": \"maoxian\"}, {\"n\": \"犯罪\", \"v\": \"fanzui\"}, {\"n\": \"纪录\", \"v\": \"jilu\"}, {\"n\": \"古装\", \"v\": \"guzhuang\"}, {\"n\": \"奇幻\", \"v\": \"qihuan\"}, {\"n\": \"国语\", \"v\": \"guoyu\"}, {\"n\": \"综艺\", \"v\": \"zongyi\"}, {\"n\": \"历史\", \"v\": \"lishi\"}, {\"n\": \"运动\", \"v\": \"yundong\"}, {\"n\": \"原创压制\", \"v\": \"yuanchuang\"}, {\"n\": \"美剧\", \"v\": \"meiju\"}, {\"n\": \"韩剧\", \"v\": \"hanju\"}, {\"n\": \"国产电视剧\", \"v\": \"guoju\"}, {\"n\": \"日剧\", \"v\": \"riju\"}, {\"n\": \"英剧\", \"v\": \"yingju\"}, {\"n\": \"德剧\", \"v\": \"deju\"}, {\"n\": \"俄剧\", \"v\": \"eju\"}, {\"n\": \"巴剧\", \"v\": \"baju\"}, {\"n\": \"加剧\", \"v\": \"jiaju\"}, {\"n\": \"西剧\", \"v\": \"anish\"}, {\"n\": \"意大利剧\", \"v\": \"yidaliju\"}, {\"n\": \"泰剧\", \"v\": \"taiju\"}, {\"n\": \"港台剧\", \"v\": \"gangtaiju\"}, {\"n\": \"法剧\", \"v\": \"faju\"}, {\"n\": \"澳剧\", \"v\": \"aoju\"}]}, {\"key\": \"area\", \"name\": \"地区\", \"value\": [{\"n\": \"不限\", \"v\": \"\"}, {\"n\": \"中国大陆\", \"v\": \"中国大陆\"}, {\"n\": \"中国香港\", \"v\": \"中国香港\"}, {\"n\": \"中国台湾\", \"v\": \"中国台湾\"}, {\"n\": \"美国\", \"v\": \"美国\"}, {\"n\": \"英国\", \"v\": \"英国\"}, {\"n\": \"日本\", \"v\": \"日本\"}, {\"n\": \"韩国\", \"v\": \"韩国\"}, {\"n\": \"法国\", \"v\": \"法国\"}, {\"n\": \"印度\", \"v\": \"印度\"}, {\"n\": \"德国\", \"v\": \"德国\"}, {\"n\": \"西班牙\", \"v\": \"西班牙\"}, {\"n\": \"意大利\", \"v\": \"意大利\"}, {\"n\": \"澳大利亚\", \"v\": \"澳大利亚\"}, {\"n\": \"比利时\", \"v\": \"比利时\"}, {\"n\": \"瑞典\", \"v\": \"瑞典\"}, {\"n\": \"荷兰\", \"v\": \"荷兰\"}, {\"n\": \"丹麦\", \"v\": \"丹麦\"}, {\"n\": \"加拿大\", \"v\": \"加拿大\"}, {\"n\": \"俄罗斯\", \"v\": \"俄罗斯\"}]}, {\"key\": \"year\", \"name\": \"年份\", \"value\": [{\"n\": \"全部\", \"v\": \"\"}, {\"n\": \"2021\", \"v\": \"2021\"}, {\"n\": \"2020\", \"v\": \"2020\"}, {\"n\": \"2019\", \"v\": \"2019\"}, {\"n\": \"2018\", \"v\": \"2018\"}, {\"n\": \"2017\", \"v\": \"2017\"}, {\"n\": \"2016\", \"v\": \"2016\"}, {\"n\": \"2015\", \"v\": \"2015\"}, {\"n\": \"2014\", \"v\": \"2014\"}, {\"n\": \"2013\", \"v\": \"2013\"}, {\"n\": \"2012\", \"v\": \"2012\"}, {\"n\": \"2011\", \"v\": \"2011\"}, {\"n\": \"2010\", \"v\": \"2010\"}, {\"n\": \"2009\", \"v\": \"2009\"}, {\"n\": \"2008\", \"v\": \"2008\"}, {\"n\": \"2007\", \"v\": \"2007\"}, {\"n\": \"2006\", \"v\": \"2006\"}, {\"n\": \"2005\", \"v\": \"2005\"}, {\"n\": \"2004\", \"v\": \"2004\"}, {\"n\": \"2003\", \"v\": \"2003\"}, {\"n\": \"2002\", \"v\": \"2002\"}, {\"n\": \"2001\", \"v\": \"2001\"}, {\"n\": \"2000\", \"v\": \"2000\"}]}, {\"key\": \"order\", \"name\": \"排序\", \"value\": [{\"n\": \"更新时间\", \"v\": \"0\"}, {\"n\": \"豆瓣评分\", \"v\": \"1\"}]}], \"0\": [{\"key\": \"s\", \"name\": \"类型\", \"value\": [{\"n\": \"全部\", \"v\": \"all\"}, {\"n\": \"动作\", \"v\": \"dongzuo\"}, {\"n\": \"爱情\", \"v\": \"aiqing\"}, {\"n\": \"喜剧\", \"v\": \"xiju\"}, {\"n\": \"科幻\", \"v\": \"kehuan\"}, {\"n\": \"恐怖\", \"v\": \"kongbu\"}, {\"n\": \"战争\", \"v\": \"zhanzheng\"}, {\"n\": \"武侠\", \"v\": \"wuxia\"}, {\"n\": \"魔幻\", \"v\": \"mohuan\"}, {\"n\": \"剧情\", \"v\": \"juqing\"}, {\"n\": \"动画\", \"v\": \"donghua\"}, {\"n\": \"惊悚\", \"v\": \"jingsong\"}, {\"n\": \"3D\", \"v\": \"3D\"}, {\"n\": \"灾难\", \"v\": \"zainan\"}, {\"n\": \"悬疑\", \"v\": \"xuanyi\"}, {\"n\": \"警匪\", \"v\": \"jingfei\"}, {\"n\": \"文艺\", \"v\": \"wenyi\"}, {\"n\": \"青春\", \"v\": \"qingchun\"}, {\"n\": \"冒险\", \"v\": \"maoxian\"}, {\"n\": \"犯罪\", \"v\": \"fanzui\"}, {\"n\": \"纪录\", \"v\": \"jilu\"}, {\"n\": \"古装\", \"v\": \"guzhuang\"}, {\"n\": \"奇幻\", \"v\": \"qihuan\"}, {\"n\": \"国语\", \"v\": \"guoyu\"}, {\"n\": \"综艺\", \"v\": \"zongyi\"}, {\"n\": \"历史\", \"v\": \"lishi\"}, {\"n\": \"运动\", \"v\": \"yundong\"}, {\"n\": \"原创压制\", \"v\": \"yuanchuang\"}, {\"n\": \"美剧\", \"v\": \"meiju\"}, {\"n\": \"韩剧\", \"v\": \"hanju\"}, {\"n\": \"国产电视剧\", \"v\": \"guoju\"}, {\"n\": \"日剧\", \"v\": \"riju\"}, {\"n\": \"英剧\", \"v\": \"yingju\"}, {\"n\": \"德剧\", \"v\": \"deju\"}, {\"n\": \"俄剧\", \"v\": \"eju\"}, {\"n\": \"巴剧\", \"v\": \"baju\"}, {\"n\": \"加剧\", \"v\": \"jiaju\"}, {\"n\": \"西剧\", \"v\": \"anish\"}, {\"n\": \"意大利剧\", \"v\": \"yidaliju\"}, {\"n\": \"泰剧\", \"v\": \"taiju\"}, {\"n\": \"港台剧\", \"v\": \"gangtaiju\"}, {\"n\": \"法剧\", \"v\": \"faju\"}, {\"n\": \"澳剧\", \"v\": \"aoju\"}]}, {\"key\": \"area\", \"name\": \"地区\", \"value\": [{\"n\": \"不限\", \"v\": \"\"}, {\"n\": \"中国大陆\", \"v\": \"中国大陆\"}, {\"n\": \"中国香港\", \"v\": \"中国香港\"}, {\"n\": \"中国台湾\", \"v\": \"中国台湾\"}, {\"n\": \"美国\", \"v\": \"美国\"}, {\"n\": \"英国\", \"v\": \"英国\"}, {\"n\": \"日本\", \"v\": \"日本\"}, {\"n\": \"韩国\", \"v\": \"韩国\"}, {\"n\": \"法国\", \"v\": \"法国\"}, {\"n\": \"印度\", \"v\": \"印度\"}, {\"n\": \"德国\", \"v\": \"德国\"}, {\"n\": \"西班牙\", \"v\": \"西班牙\"}, {\"n\": \"意大利\", \"v\": \"意大利\"}, {\"n\": \"澳大利亚\", \"v\": \"澳大利亚\"}, {\"n\": \"比利时\", \"v\": \"比利时\"}, {\"n\": \"瑞典\", \"v\": \"瑞典\"}, {\"n\": \"荷兰\", \"v\": \"荷兰\"}, {\"n\": \"丹麦\", \"v\": \"丹麦\"}, {\"n\": \"加拿大\", \"v\": \"加拿大\"}, {\"n\": \"俄罗斯\", \"v\": \"俄罗斯\"}]}, {\"key\": \"year\", \"name\": \"年份\", \"value\": [{\"n\": \"全部\", \"v\": \"\"}, {\"n\": \"2021\", \"v\": \"2021\"}, {\"n\": \"2020\", \"v\": \"2020\"}, {\"n\": \"2019\", \"v\": \"2019\"}, {\"n\": \"2018\", \"v\": \"2018\"}, {\"n\": \"2017\", \"v\": \"2017\"}, {\"n\": \"2016\", \"v\": \"2016\"}, {\"n\": \"2015\", \"v\": \"2015\"}, {\"n\": \"2014\", \"v\": \"2014\"}, {\"n\": \"2013\", \"v\": \"2013\"}, {\"n\": \"2012\", \"v\": \"2012\"}, {\"n\": \"2011\", \"v\": \"2011\"}, {\"n\": \"2010\", \"v\": \"2010\"}, {\"n\": \"2009\", \"v\": \"2009\"}, {\"n\": \"2008\", \"v\": \"2008\"}, {\"n\": \"2007\", \"v\": \"2007\"}, {\"n\": \"2006\", \"v\": \"2006\"}, {\"n\": \"2005\", \"v\": \"2005\"}, {\"n\": \"2004\", \"v\": \"2004\"}, {\"n\": \"2003\", \"v\": \"2003\"}, {\"n\": \"2002\", \"v\": \"2002\"}, {\"n\": \"2001\", \"v\": \"2001\"}, {\"n\": \"2000\", \"v\": \"2000\"}]}, {\"key\": \"order\", \"name\": \"排序\", \"value\": [{\"n\": \"更新时间\", \"v\": \"0\"}, {\"n\": \"豆瓣评分\", \"v\": \"1\"}]}], \"1\": [{\"key\": \"s\", \"name\": \"类型\", \"value\": [{\"n\": \"全部\", \"v\": \"all\"}, {\"n\": \"动作\", \"v\": \"dongzuo\"}, {\"n\": \"爱情\", \"v\": \"aiqing\"}, {\"n\": \"喜剧\", \"v\": \"xiju\"}, {\"n\": \"科幻\", \"v\": \"kehuan\"}, {\"n\": \"恐怖\", \"v\": \"kongbu\"}, {\"n\": \"战争\", \"v\": \"zhanzheng\"}, {\"n\": \"武侠\", \"v\": \"wuxia\"}, {\"n\": \"魔幻\", \"v\": \"mohuan\"}, {\"n\": \"剧情\", \"v\": \"juqing\"}, {\"n\": \"动画\", \"v\": \"donghua\"}, {\"n\": \"惊悚\", \"v\": \"jingsong\"}, {\"n\": \"3D\", \"v\": \"3D\"}, {\"n\": \"灾难\", \"v\": \"zainan\"}, {\"n\": \"悬疑\", \"v\": \"xuanyi\"}, {\"n\": \"警匪\", \"v\": \"jingfei\"}, {\"n\": \"文艺\", \"v\": \"wenyi\"}, {\"n\": \"青春\", \"v\": \"qingchun\"}, {\"n\": \"冒险\", \"v\": \"maoxian\"}, {\"n\": \"犯罪\", \"v\": \"fanzui\"}, {\"n\": \"纪录\", \"v\": \"jilu\"}, {\"n\": \"古装\", \"v\": \"guzhuang\"}, {\"n\": \"奇幻\", \"v\": \"qihuan\"}, {\"n\": \"国语\", \"v\": \"guoyu\"}, {\"n\": \"综艺\", \"v\": \"zongyi\"}, {\"n\": \"历史\", \"v\": \"lishi\"}, {\"n\": \"运动\", \"v\": \"yundong\"}, {\"n\": \"原创压制\", \"v\": \"yuanchuang\"}, {\"n\": \"美剧\", \"v\": \"meiju\"}, {\"n\": \"韩剧\", \"v\": \"hanju\"}, {\"n\": \"国产电视剧\", \"v\": \"guoju\"}, {\"n\": \"日剧\", \"v\": \"riju\"}, {\"n\": \"英剧\", \"v\": \"yingju\"}, {\"n\": \"德剧\", \"v\": \"deju\"}, {\"n\": \"俄剧\", \"v\": \"eju\"}, {\"n\": \"巴剧\", \"v\": \"baju\"}, {\"n\": \"加剧\", \"v\": \"jiaju\"}, {\"n\": \"西剧\", \"v\": \"anish\"}, {\"n\": \"意大利剧\", \"v\": \"yidaliju\"}, {\"n\": \"泰剧\", \"v\": \"taiju\"}, {\"n\": \"港台剧\", \"v\": \"gangtaiju\"}, {\"n\": \"法剧\", \"v\": \"faju\"}, {\"n\": \"澳剧\", \"v\": \"aoju\"}]}, {\"key\": \"area\", \"name\": \"地区\", \"value\": [{\"n\": \"不限\", \"v\": \"\"}, {\"n\": \"中国大陆\", \"v\": \"中国大陆\"}, {\"n\": \"中国香港\", \"v\": \"中国香港\"}, {\"n\": \"中国台湾\", \"v\": \"中国台湾\"}, {\"n\": \"美国\", \"v\": \"美国\"}, {\"n\": \"英国\", \"v\": \"英国\"}, {\"n\": \"日本\", \"v\": \"日本\"}, {\"n\": \"韩国\", \"v\": \"韩国\"}, {\"n\": \"法国\", \"v\": \"法国\"}, {\"n\": \"印度\", \"v\": \"印度\"}, {\"n\": \"德国\", \"v\": \"德国\"}, {\"n\": \"西班牙\", \"v\": \"西班牙\"}, {\"n\": \"意大利\", \"v\": \"意大利\"}, {\"n\": \"澳大利亚\", \"v\": \"澳大利亚\"}, {\"n\": \"比利时\", \"v\": \"比利时\"}, {\"n\": \"瑞典\", \"v\": \"瑞典\"}, {\"n\": \"荷兰\", \"v\": \"荷兰\"}, {\"n\": \"丹麦\", \"v\": \"丹麦\"}, {\"n\": \"加拿大\", \"v\": \"加拿大\"}, {\"n\": \"俄罗斯\", \"v\": \"俄罗斯\"}]}, {\"key\": \"year\", \"name\": \"年份\", \"value\": [{\"n\": \"全部\", \"v\": \"\"}, {\"n\": \"2021\", \"v\": \"2021\"}, {\"n\": \"2020\", \"v\": \"2020\"}, {\"n\": \"2019\", \"v\": \"2019\"}, {\"n\": \"2018\", \"v\": \"2018\"}, {\"n\": \"2017\", \"v\": \"2017\"}, {\"n\": \"2016\", \"v\": \"2016\"}, {\"n\": \"2015\", \"v\": \"2015\"}, {\"n\": \"2014\", \"v\": \"2014\"}, {\"n\": \"2013\", \"v\": \"2013\"}, {\"n\": \"2012\", \"v\": \"2012\"}, {\"n\": \"2011\", \"v\": \"2011\"}, {\"n\": \"2010\", \"v\": \"2010\"}, {\"n\": \"2009\", \"v\": \"2009\"}, {\"n\": \"2008\", \"v\": \"2008\"}, {\"n\": \"2007\", \"v\": \"2007\"}, {\"n\": \"2006\", \"v\": \"2006\"}, {\"n\": \"2005\", \"v\": \"2005\"}, {\"n\": \"2004\", \"v\": \"2004\"}, {\"n\": \"2003\", \"v\": \"2003\"}, {\"n\": \"2002\", \"v\": \"2002\"}, {\"n\": \"2001\", \"v\": \"2001\"}, {\"n\": \"2000\", \"v\": \"2000\"}]}, {\"key\": \"order\", \"name\": \"排序\", \"value\": [{\"n\": \"更新时间\", \"v\": \"0\"}, {\"n\": \"豆瓣评分\", \"v\": \"1\"}]}]}, \"homeVodNode\": \"//div[contains(@class, 'pusher ui body')]//div[contains(@class,'ui seven')]/div[position() < 6]\", \"homeVodName\": \"/div[@class='content']/span/text()\", \"homeVodId\": \"/a[@class='image']/@href\", \"homeVodIdR\": \"/(\\\\S+).htm\", \"homeVodImg\": \"/a[@class='image']/img/@data-src\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"concat(//span[@class='ep'],//span[@class='rate'])\", \"cateUrl\": \"https://www.mp4er.cc/s/{cateId}/{catePg}\", \"cateVodNode\": \"//div[contains(@class,'ui container')]/div[contains(@class,'ui eight doubling')]/div\", \"cateVodName\": \"/div[@class='content']/span/text()\", \"cateVodId\": \"/a[@class='image']/@href\", \"cateVodIdR\": \"/(\\\\S+).htm\", \"cateVodImg\": \"/a[@class='image']/img/@src\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"concat(//span[@class='ep'],//span[@class='rate'])\", \"dtUrl\": \"https://www.mp4er.cc/{vid}.htm\", \"dtNode\": \"//div[contains(@class,'ui container movie-info')]\", \"dtName\": \"/h2/text()\", \"dtNameR\": \".+《(\\\\S+)》.+\", \"dtImg\": \"//div[@class='info0']/img/@src\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='info0']/ul/li/a[contains(@target,'new')]/text()\", \"dtArea\": \"//div[@class='info0']/ul/li/strong[contains(text(),'地区')]/parent::text()\", \"dtActor\": \"//div[@class='info0']/ul/li/a[contains(@href,'performer')]/following-sibling::*/text()\", \"dtDirector\": \"//div[@class='info0']/ul/li/a[contains(@href,'director')]/text()\", \"dtDesc\": \"substring-after(//div[@class='info0']//div[@class='summary']/html(), 'br>')\", \"dtFromNode\": \"//div[@class='info1']/h4/div\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//div[@class='info1']\", \"dtUrlSubNode\": \"/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"(\\\\S+).htm\", \"dtUrlName\": \"/text()\", \"playUrl\": \"https://www.mp4er.cc/{playUrl}.htm\"}"
+    },
+    {
+      "key": "xpath-cjtys",
+      "name": "长江影视",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://cjt521.com\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://cjt521.com/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//div[contains(@class,'ec-allnav')]//ul/li/a[contains(@href, 'vod/type')]\", \"cateName\": \"/spam/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/index.php/vod/type/id/(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class,'top20')]//h2[contains(@class,'title-name')and(/span[contains(text(),'最新')])]/parent::*/parent::*/div[contains(@class,'vodlist') and not(contains(@style,'display:none'))]//a[contains(@class,'aplus-exp')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/index.php/vod/play/id/(\\\\w+)/sid/.+\", \"homeVodImg\": \"/div[contains(@class, 'eclazy')]/@data-original\", \"homeVodMark\": \"/span[contains(@class, 'pack-prb')]/text()\", \"cateUrl\": \"https://cjt521.com/index.php/vod/show/id/{cateId}/page/{catePg}.html\", \"cateVodNode\": \"//div[contains(@class, 'vodlist')]//a[contains(@class,'aplus-exp')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/index.php/vod/play/id/(\\\\w+)/sid/.+\", \"cateVodImg\": \"/div[contains(@class, 'eclazy')]/@data-original\", \"cateVodMark\": \"/span[contains(@class, 'pack-prb')]/text()\", \"dtUrl\": \"https://cjt521.com/index.php/vod/detail/id/{vid}.html\", \"dtNode\": \"//div[@class='vod-detail']\", \"dtName\": \"//div[contains(@class,'s-top-right')]/div[contains(@class,'s-top-info-title')]/h1/text()\", \"dtImg\": \"//a[contains(@class,'s-cover-img')]/img/@src\", \"dtCate\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item') and contains(/span/text(),'类型')]/span/following-sibling::*/text()\", \"dtArea\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item') and contains(/span/text(),'地区')]/span/following-sibling::*/text()\", \"dtYear\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item') and contains(/span/text(),'年代')]/span/following-sibling::*/text()\", \"dtActor\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item') and contains(/span/text(),'演员')]/span/following-sibling::*/text()\", \"dtDirector\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item') and contains(/span/text(),'导演')]/span/following-sibling::*/text()\", \"dtDesc\": \"//div[contains(@class,'s-top-info-detail')]/p[contains(@class,'item-desc')]/span/following-sibling::*/text()\", \"dtFromNode\": \"//div[contains(@class, 'play_source')]/div[contains(@class,'play_source_tab')]/div/a\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"(.+)\\\\(\", \"dtUrlNode\": \"//div[contains(@class, 'play_source')]//div[contains(@class, 'play_list_box')]//ul\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/index.php/vod/play/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://cjt521.com/index.php/vod/play/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://cjt521.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-dm84",
+      "name": "动漫巴士",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://dm84.tv\", \"cateNode\": \"//ul[contains(@class,'nav_row')]/li/a[contains(@href, '.html')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/list-(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//ul[@class='v_list']/li/div[@class='item']\", \"homeVodName\": \"/a[@class='title']/@title\", \"homeVodId\": \"/a[@class='title']/@href\", \"homeVodIdR\": \"/v/(\\\\w+).html\", \"homeVodImg\": \"/a/@data-bg\", \"homeVodMark\": \"/span[@class='desc']/text()\", \"cateUrl\": \"https://dm84.tv/list-{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[@class='v_list']/li/div[@class='item']\", \"cateVodName\": \"/a[@class='title']/@title\", \"cateVodId\": \"/a[@class='title']/@href\", \"cateVodIdR\": \"/v/(\\\\w+).html\", \"cateVodImg\": \"/a/@data-bg\", \"cateVodMark\": \"/span[@class='desc']/text()\", \"dtUrl\": \"https://dm84.tv/v/{vid}.html\", \"dtNode\": \"//div[contains(@class,'v_content')]\", \"dtName\": \"/parent::*/h1[@class='v_title']/a/text()\", \"dtImg\": \"/div[@class='cover']/img/@src\", \"dtFromNode\": \"//ul[contains(@class,'play_from')]/li\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//ul[contains(@class,'play_list')]\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/p/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"playUrl\": \"https://dm84.tv/p/{playUrl}.html\", \"searchUrl\": \"https://dm84.tv/s----------.html?wd={wd}\", \"scVodNode\": \"//ul[@class='v_list']/li/div[@class='item']\", \"scVodName\": \"/a[@class='title']/@title\", \"scVodId\": \"/a[@class='title']/@href\", \"scVodIdR\": \"/v/(\\\\w+).html\", \"scVodImg\": \"/a/@data-bg\", \"scVodMark\": \"/span[@class='desc']/text()\"}"
+    },
+    {
+      "key": "xpath-duboku",
+      "name": "毒播库",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://www.duboku.su\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.duboku.su/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class,'myui-header__menu nav-menu')]/li[contains(@class, 'dropdown-hover')]//div/ul/li/a[contains(@href, 'vodtype') and not(contains(@href,'label'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodtype/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'padding-0')]//ul[contains(@class,'myui-vodlist')]/li//a[contains(@class,'myui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/voddetail/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://duboku.su/vodtype/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist')]//li//a[contains(@class,'myui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/voddetail/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://duboku.su/voddetail/{vid}.html\", \"dtNode\": \"//div[contains(@class,'col-lg-wide-75')]\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '更新')]/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/video/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://duboku.su/video/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://duboku.su/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-egg",
+      "name": "蛋蛋赞",
+      "type": 3,
+      "api": "csp_XPathEgg",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.dandanzan.cc\", \"cateNode\": \"//div[@class='nav']/ul/li/a[@href!='/']\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/(\\\\S+)/\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class,'lists-thumb-top') and @id='slider']//div[@class='lists-content']/ul/li\", \"homeVodName\": \"/h2/a/text()\", \"homeVodId\": \"/h2/a/@href\", \"homeVodIdR\": \"/(\\\\S+).html\", \"homeVodImg\": \"/a/img/@src\", \"homeVodMark\": \"/a/div[@class='note']/span/text()\", \"cateUrl\": \"https://www.dandanzan.cc/{cateId}/\", \"cateVodNode\": \"//div[@class='lists-content']/ul/li\", \"cateVodName\": \"/h2/a/text()\", \"cateVodId\": \"/h2/a/@href\", \"cateVodIdR\": \"/(\\\\S+).html\", \"cateVodImg\": \"/a/img/@src\", \"cateVodMark\": \"/a/div[@class='note']/span/text()\", \"dtUrl\": \"http://www.dandanzan.cc/{vid}.html\", \"dtNode\": \"//header[@class='product-header']\", \"dtName\": \"//h1[contains(@class,'product-title')]/text()\", \"dtImg\": \"/img[1]/@src\", \"dtCate\": \"/div[@class='product-excerpt' and contains(text(),'类型')]/span/a/text()\", \"dtYear\": \"//h1[contains(@class,'product-title')]/span[1]/text()\", \"dtYearR\": \"\\\\((\\\\S+)\\\\)\", \"dtArea\": \"/div[@class='product-excerpt' and contains(text(),'地区')]/span/a/text()\", \"dtActor\": \"/div[@class='product-excerpt' and contains(text(),'主演')]/span/a/text()\", \"dtDirector\": \"/div[@class='product-excerpt' and contains(text(),'导演')]/span/a/text()\", \"dtDesc\": \"/div[@class='product-excerpt' and contains(text(),'剧情简介')]/span/text()\", \"dtFromNode\": \"/nil\", \"dtUrlNode\": \"/nil\", \"playUrl\": \"https://www.dandanzan.cc/url.php\", \"searchUrl\": \"https://www.dandanzan.cc/so/{wd}-{wd}--.html\", \"scVodNode\": \"//div[@class='lists-content']/ul/li\", \"scVodName\": \"/h2/a/text()\", \"scVodId\": \"/h2/a/@href\", \"scVodIdR\": \"/(\\\\S+).html\", \"scVodImg\": \"/a/img/@src\", \"scVodMark\": \"/a/div[@class='note']/span/text()\"}"
+    },
+    {
+      "key": "xpath-gimytv",
+      "name": "Gimy剧迷",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://gimytv.com/\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://gimytv.com/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[@class='myui-header__menu']/li/a[contains(@href, 'browse')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/browse/(\\\\w+).html\", \"cateManual\": {\"电影\": \"movies\", \"电视剧\": \"tvseries\", \"综艺\": \"tv_show\", \"动漫\": \"anime\"}, \"homeVodNode\": \"//ul[@class='myui-vodlist clearfix']/li/div/a\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodMark\": \"/span[contains(@class, 'pic-text')]/text()\", \"cateUrl\": \"https://gimytv.com/genre/{cateId}---{catePg}.html\", \"cateVodNode\": \"//ul[@class='myui-vodlist clearfix']/li/div/a\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodMark\": \"/span[contains(@class, 'pic-text')]/text()\", \"dtUrl\": \"https://gimytv.com/{vid}.html\", \"dtNode\": \"//body\", \"dtName\": \"//div[@class='myui-content__thumb']/a/@title\", \"dtImg\": \"//div[@class='myui-content__thumb']/a/img/@data-original\", \"dtFromNode\": \"//div[@class='myui-panel_hd']/div/h3[contains(text(),'線路')]\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//ul[contains(@class,'myui-content__list')]\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://gimytv.com/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://gimytv.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-jpys",
+      "name": "极品影视",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.jpysvip.net\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.jpysvip.net/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class,'myui-header__menu')]/li[@class='dropdown-hover']//ul/li/a[contains(@href, 'vodtype') and not(contains(@href, '26'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodtype/(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'col-lg-wide-75')]//ul[contains(@class,'myui-vodlist')]/li//a[contains(@class,'myui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/voddetail/(\\\\w+).html\", \"homeVodImg\": \"@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://www.jpysvip.net/vodtype/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist')]//li//a[contains(@class,'myui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/voddetail/(\\\\w+).html\", \"cateVodImg\": \"@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://www.jpysvip.net/voddetail/{vid}.html\", \"dtNode\": \"//div[contains(@class,'col-lg-wide-75')]\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/vodplay/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.jpysvip.net/vodplay/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://www.jpysvip.net/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-jumi",
+      "name": "剧迷",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://jumi.tv\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://jumi.tv/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class, 'myui-header__menu nav-menu')]/li[@class='dropdown-hover']//ul/li/a[contains(@href, 'type') and not(contains(@href, 'label'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/type/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'col-lg-wide-75')]//ul[contains(@class,'myui-vodlist')]/li//a[contains(@class,'myui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/vod/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://jumi.tv/type/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist')]//li//a[contains(@class,'myui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/vod/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://jumi.tv/vod/{vid}.html\", \"dtNode\": \"//div[contains(@class,'col-lg-wide-75')]\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分類')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地區')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '導演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '簡介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/play/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://jumi.tv/play/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://jumi.tv/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-lezhutv",
+      "name": "乐猪TV",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"http://www.lezhutv.com\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"http://www.lezhutv.com/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//div[contains(@class,'head')]/div[contains(@class, 'nav')]/a[contains(@href,'type')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/type/(\\\\S+).html\", \"cateManual\": {\"电影\": \"1\", \"连续剧\": \"2\", \"动漫\": \"4\", \"韩剧\": \"14\", \"综艺\": \"3\"}, \"homeVodNode\": \"//ul[contains(@class, 'tbox_m')]/li[contains(@class,'vbox')]/a[contains(@class,'vbox_t')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/detail/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span/text()\", \"cateUrl\": \"http://www.lezhutv.com/type/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class, 'tbox_m')]/li[contains(@class,'vbox')]/a[contains(@class,'vbox_t')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/detail/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span/text()\", \"dtUrl\": \"http://www.lezhutv.com/detail/{vid}.html\", \"dtNode\": \"//body\", \"dtName\": \"//div[@class='data']/h4/text()\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='dbox']/div[contains(@class,'img item-lazy')]/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//span[contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//span[contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//span[contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//span[contains(text(), '更新')]/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//p[@class='act']/span[contains(text(), '主演')]/parent::text()\", \"dtActorR\": \"\", \"dtDirector\": \"//p[@class='dir']/span[contains(text(), '导演')]/parent::text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//span[contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[contains(@class, 'tbox_t')]/h3/i[contains(@class, 'icon-pin')]/parent::*\", \"dtFromName\": \"concat('播放源',count(parent::*/preceding::*/div[contains(@class, 'tbox_t')]/h3/i[contains(@class, 'icon-pin')]) + 1)\", \"dtFromNameR\": \"(\\\\S+).0\", \"dtUrlNode\": \"//div[contains(@class,'tabs_block')]/ul[contains(@class, 'list_block show')]\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/play/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"http://www.lezhutv.com/play/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"http://www.lezhutv.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-miniku",
+      "name": "米酷影视",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://www.miniku.cc\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.miniku.cc/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class, 'nav-menu-items')]/li/a[contains(@href, 'vodtype')]\", \"cateName\": \"/@title\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodtype/(\\\\d+)/\", \"homeVodNode\": \"//div[contains(@class, 'module-items')]/div[contains(@class, 'module-item')]\", \"homeVodName\": \"/div[contains(@class, 'module-item-titlebox')]/a/@title\", \"homeVodId\": \"/div[contains(@class, 'module-item-titlebox')]/a/@href\", \"homeVodIdR\": \"/voddetail/(\\\\w+)/\", \"homeVodImg\": \"/div[contains(@class, 'module-item-cover')]/div[contains(@class, 'module-item-pic')]/img/@data-src\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/div[contains(@class,'module-item-text')]/text()\", \"cateUrl\": \"https://www.miniku.cc/vodshow/{cateId}--------{catePg}---/\", \"cateVodNode\": \"//div[@class='module-items']/div/div/div[@class='module-item-pic']\", \"cateVodName\": \"/a/@title\", \"cateVodId\": \"/a/@href\", \"cateVodIdR\": \"/voddetail/(\\\\w+)/\", \"cateVodImg\": \"/img/@data-src\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"\", \"dtUrl\": \"https://www.miniku.cc/voddetail/{vid}/\", \"dtNode\": \"//div[@class='box view-heading']\", \"dtName\": \"//div[@class='video-info']/div[@class='video-info-header']/h1/text()\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='video-cover']//div[@class='module-item-pic']/img/@data-src\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='video-info']//div[@class='tag-link']/span/following-sibling::*/text()\", \"dtYear\": \"\", \"dtArea\": \"\", \"dtActor\": \"\", \"dtDirector\": \"\", \"dtDesc\": \"\", \"dtFromNode\": \"//div[contains(@class, 'module-tab-content')]/div[contains(@class, 'module-tab-item')]/span\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//div[contains(@class, 'module-blocklist')]\", \"dtUrlSubNode\": \"/div/a\", \"dtUrlId\": \"/@href\", \"dtUrlIdR\": \"/vodplay/(\\\\S+)/\", \"dtUrlName\": \"/span/text()\", \"playUrl\": \"https://www.miniku.cc/vodplay/{playUrl}/\", \"searchUrl\": \"https://www.miniku.cc/vodsearch/{wd}----------/\", \"scVodNode\": \"//div[@class='module-list']\", \"scVodName\": \"//a/@alt\", \"scVodId\": \"/a/@href\", \"scVodImg\": \"/img/@data-src\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-nfmovie",
+      "name": "奈飞影视",
+      "type": 3,
+      "api": "csp_XPathNfMov",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.nfmovies.com\", \"cateNode\": \"//li[contains(@class,'search-ul')]//ul/li/a[contains(@href, '/list/')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/list/(\\\\d+)\", \"cateManual\": {}, \"homeVodNode\": \"//ul[contains(@class,'myui-vodlist clearfix')]/li[position()<6]/div/a\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/detail/(\\\\w+)\", \"homeVodImg\": \"/@data-original\", \"homeVodMark\": \"/span[contains(@class, 'pic-text')]/text()\", \"cateUrl\": \"https://www.nfmovies.com/list/{cateId}-{catePg}\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist clearfix')]/li/div/a\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/detail/(\\\\w+)\", \"cateVodImg\": \"/@data-original\", \"cateVodMark\": \"/span[contains(@class, 'pic-text')]/text()\", \"dtUrl\": \"https://www.nfmovies.com/detail/{vid}\", \"dtNode\": \"//div[contains(@class,'myui-content__thumb')]/parent::*\", \"dtName\": \"//a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtImg\": \"//a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/video/(\\\\S+)\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.nfmovies.com/video/{playUrl}\", \"playUa\": \"\", \"searchUrl\": \"https://www.nfmovies.com/search.php?searchword={wd}\", \"scVodNode\": \"//ul[contains(@class,'myui-vodlist__media')]//div[@class='thumb']\", \"scVodName\": \"/a/@title\", \"scVodId\": \"/a/@href\", \"scVodIdR\": \"/detail/(\\\\w+)\", \"scVodImg\": \"/a/@data-original\", \"scVodMark\": \"/a/span[contains(@class, 'pic-text')]/text()\"}"
+    },
+    {
+      "key": "xpath-olevod",
+      "name": "欧乐影院",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://olevod.com\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://olevod.com/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class,'top_nav clearfix')]//li/a[contains(@href,'type')and not(contains(@href,'5'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/index.php/vod/type/id/(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'pannel')]//ul[contains(@class,'vodlist vodlist_wi list_v12 clearfix')]/li//a[contains(@class,'vodlist_thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/index.php/vod/type/id/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'text_dy') and contains(@class,'style')]/text()\", \"cateUrl\": \"https://olevod.com/index.php/vod/type/id/{cateId}/page/{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'vodlist vodlist_wi list_v12 clearfix')]//li//a[contains(@class,'vodlist_thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/index.php/vod/detail/id/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'text_dy') and contains(@class,'style')]/text()\", \"dtUrl\": \"https://olevod.com/index.php/vod/detail/id/{vid}.html\", \"dtNode\": \"//div[contains(@class,'hot_banner')]\", \"dtName\": \"//div[@class='content_box clearfix']/div/a/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='content_box clearfix']/div/a/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtYear\": \"//div[contains(@class,'content_detail')]//span[contains(@class,'text_muted hidden_xs') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[contains(@class,'content_detail')]//span[contains(@class,'text_muted hidden_xs') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtCate\": \"//div[contains(@class,'content_detail')]//span[contains(@class,'text_muted hidden_xs') and contains(text(), '类型')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtMark\": \"//div[contains(@class,'content_detail')]//span[contains(text(), '状态')]/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//div[contains(@class,'content_detail')]//span[contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[contains(@class,'content_detail')]//span[contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"///div[contains(@class,'content_detail')]//span[contains(@class,'left text_muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[contains(@class,'play_source_tab')]/a\", \"dtFromName\": \"/@alt\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'playlist_full')]/ul[contains(@class,'content_playlist clearfix')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"/@href\", \"dtUrlIdR\": \"/index.php/vod/play/id/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://olevod.com/index.php/vod/play/id/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://olevod.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-onedianshi",
+      "name": "one电视机",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://www.onedianshi.com\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.onedianshi.com/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[@class='myui-header__menu']/li/a[contains(@href, 'vod')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vod/type/id/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//ul[contains(@class,'myui-vodlist')]/li/div/a\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/vod/detail/id/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"//span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://www.onedianshi.com/index.php/vod/show/id/{cateId}/page/{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist')]/li/div/a\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/vod/detail/id/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"//span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://www.onedianshi.com/vod/detail/id/{vid}.html\", \"dtNode\": \"//body\", \"dtName\": \"//div[@class='myui-content__thumb']/a/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a/img/@data-original\", \"dtImgR\": \"\", \"dtCate\": \"//span[contains(text(), '分类')]/following-sibling::a/text()\", \"dtYear\": \"//span[contains(text(), '年份')]/following-sibling::a/text()\", \"dtDirector\": \"//span[contains(text(), '导演')]/following-sibling::a/text()\", \"dtActor\": \"//span[contains(text(), '主演')]/following-sibling::a/text()\", \"dtDesc\": \"//span[contains(text(), '简介')]/following-sibling::span/text()\", \"dtFromNode\": \"//ul[contains(@class,'nav-tabs')]/li/a\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div/ul\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"/@href\", \"dtUrlIdR\": \"/vod/play/id/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.onedianshi.com/vod/play/id/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://www.onedianshi.com/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-pianba",
+      "name": "片吧",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://www.pianba.net\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://www.pianba.net/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class,'stui-header__menu')]/li/a[contains(@href, 'sort') and not(contains(@href,'label'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/sort/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'stui-pannel__bd')]//ul[contains(@class,'stui-vodlist')]/li//a[contains(@class,'stui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/html/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://www.pianba.net/sort/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'stui-vodlist')]//li//a[contains(@class,'stui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/html/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://www.pianba.net/html/{vid}.html\", \"dtNode\": \"//div[@class='stui-content']\", \"dtName\": \"//div[@class='stui-content__detail']/h1/text()\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='stui-content__thumb']/a/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtYear\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtCate\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '类型')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtArea\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtDirector\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtActor\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '演员')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDesc\": \"//div[@class='stui-content__detail']//span[contains(@class,'data2') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[contains(@class,'stui-vodlist__head')]/span\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//ul[contains(@class,'stui-content__playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"/@href\", \"dtUrlIdR\": \"/yun/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://www.pianba.net/yun/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://www.pianba.net/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-saohuotv2",
+      "name": "骚火电影",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://saohuotv.com\", \"cateNode\": \"//ul[contains(@class,'type_list')]/li/a[contains(@href, '.html')]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/list/(\\\\d+).html\", \"cateManual\": {}, \"homeVodNode\": \"//ul[@class='v_list']/li/div[@class='v_img']\", \"homeVodName\": \"/a/@title\", \"homeVodId\": \"/a/@href\", \"homeVodIdR\": \"/movie/(\\\\w+).html\", \"homeVodImg\": \"/a/img/@data-original\", \"homeVodMark\": \"/div[@class='v_note']/text()\", \"cateUrl\": \"https://saohuotv.com/list/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[@class='v_list']/li/div[@class='v_img']\", \"cateVodName\": \"/a/@title\", \"cateVodId\": \"/a/@href\", \"cateVodIdR\": \"/movie/(\\\\w+).html\", \"cateVodImg\": \"/a/img/@data-original\", \"cateVodMark\": \"/div[@class='v_note']/text()\", \"dtUrl\": \"http://saohuotv.com/movie/{vid}.html\", \"dtNode\": \"//body\", \"dtName\": \"//section[contains(@class,'v_info_box')]/h1[1]/text()\", \"dtImg\": \"//section[contains(@class,'v_info')]/div[@class='m_background']/@style\", \"dtImgR\": \"background-image:url\\\\((\\\\S+)\\\\)\", \"dtCate\": \"//section[contains(@class,'v_info_box')]/p[1]/text()\", \"dtDesc\": \"//p[contains(@class,'show_part')]/text()\", \"dtFromNode\": \"//ul[@class='from_list']/li\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//ul[@class='play_list' or @class='large_list']/li\", \"dtUrlSubNode\": \"/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/play/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"playUrl\": \"http://saohuotv.com/play/{playUrl}.html\", \"searchUrl\": \"https://saohuotv.com/search.php?searchword={wd}\", \"scVodNode\": \"//ul[@class='v_list']/li/div[@class='v_img']\", \"scVodName\": \"/a/@title\", \"scVodId\": \"/a/@href\", \"scVodIdR\": \"/movie/(\\\\w+).html\", \"scVodImg\": \"/a/img/@data-original\", \"scVodMark\": \"/div[@class='v_note']/text()\"}"
+    },
+    {
+      "key": "xpath-sky4k",
+      "name": "Sky4K",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"author\": \"涟漪\", \"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://movie.sky4k.ga\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://movie.sky4k.ga/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[@class='vi-nav swiper-wrapper clearfix']/li/a[contains(@href, '.html') and not(contains(@href, 'topic'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/vodshow/(\\\\d+)-----------.html\", \"cateManual\": {}, \"homeVodNode\": \"//ul[@class='dx-list dx-left']/li[@class='dx-vod']\", \"homeVodName\": \"/a/@title\", \"homeVodId\": \"/a/@href\", \"homeVodIdR\": \"/voddetail/(\\\\w+).html\", \"homeVodImg\": \"/a/@data-original\", \"homeVodMark\": \"/span[contains(@class,'vod_remarks')]/text()\", \"cateUrl\": \"https://movie.sky4k.ga/vodshow/{cateId}--------{catePg}---.html\", \"cateVodNode\": \"//li[@class='dx-vod']\", \"cateVodName\": \"/a/@title\", \"cateVodId\": \"/a/@href\", \"cateVodIdR\": \"/voddetail/(\\\\w+).html\", \"cateVodImg\": \"/a/@data-original\", \"cateVodMark\": \"/span[contains(@class,'vod_remarks')]/text()\", \"dtUrl\": \"https://movie.sky4k.ga/voddetail/{vid}.html\", \"dtNode\": \"//div[@class='container detail']\", \"dtName\": \"/div[@class='detail-objs']/div[@class='obj-info']/h1/text()\", \"dtNameR\": \"\", \"dtImg\": \"/div[@class='detail-objs']/div[@class='obj-pic']/a[@class='picHover']/img/@src\", \"dtImgR\": \"\", \"dtCate\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '类型')]/parent::*/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '日期')]/parent::*/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '国家')]/parent::*/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//div[@class='col-md-8']//span[@class='info-label' and contains(text(), '状态')]/parent::*/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"/div[@class='detail-objs']/div[@class='obj-info']/div[@class='info-main']/div[@class='info-items'][2]/div[@class='video-info-item video-info-actor']/a/text()\", \"dtActorR\": \"\", \"dtDirector\": \"/div[@class='detail-objs']/div[@class='obj-info']/div[@class='info-main']/div[@class='info-items'][1]/div[@class='item-tags info-actor']/a/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='vod_content']/text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[@class='playlist']/div/div[@class='play-title']/div[@class='player_info']/h2\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\\\\S+\\\\.(\\\\S+) \\\\(\", \"dtUrlNode\": \"//div[contains(@class,'play_li fn-clear')]\", \"dtUrlSubNode\": \"/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/vodplay/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://movie.sky4k.ga/vodplay/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://movie.sky4k.ga/vodsearch/-------------.html?wd={wd}\", \"scVodNode\": \"//li[@class='dx-vod']\", \"scVodName\": \"/a/@title\", \"scVodId\": \"/a/@href\", \"scVodIdR\": \"/voddetail/(\\\\w+).html\", \"scVodImg\": \"/a/@data-original\", \"scVodMark\": \"/span[contains(@class,'vod_remarks')]/text()\"}"
+    },
+    {
+      "key": "xpath-tvci",
+      "name": "TVCI",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1\", \"homeUrl\": \"https://tv.ci\", \"dcVipFlag\": \"true\", \"pCfgJs\": \"https://tv.ci/static/js/playerconfig.js\", \"pCfgJsR\": \"[\\\\W|\\\\S|.]*?MacPlayerConfig.player_list[\\\\W|\\\\S|.]*?=([\\\\W|\\\\S|.]*?),MacPlayerConfig.downer_list\", \"dcShow2Vip\": {}, \"dcPlayUrl\": \"true\", \"cateNode\": \"//ul[contains(@class, 'myui-header__menu nav-menu')]/li[@class='dropdown-hover']//div/ul/li/a[contains(@href, 'type') and not(contains(@href,'label'))]\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"/type/(\\\\w+).html\", \"cateManual\": {}, \"homeVodNode\": \"//div[contains(@class, 'col-lg-wide-75')]//ul[contains(@class,'myui-vodlist')]/li//a[contains(@class,'myui-vodlist__thumb')]\", \"homeVodName\": \"/@title\", \"homeVodId\": \"/@href\", \"homeVodIdR\": \"/v/(\\\\w+).html\", \"homeVodImg\": \"/@data-original\", \"homeVodImgR\": \"\\\\S+(http\\\\S+)\", \"homeVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"cateUrl\": \"https://tv.ci/type/{cateId}-{catePg}.html\", \"cateVodNode\": \"//ul[contains(@class,'myui-vodlist')]//li//a[contains(@class,'myui-vodlist__thumb')]\", \"cateVodName\": \"/@title\", \"cateVodId\": \"/@href\", \"cateVodIdR\": \"/v/(\\\\w+).html\", \"cateVodImg\": \"/@data-original\", \"cateVodImgR\": \"\\\\S+(http\\\\S+)\", \"cateVodMark\": \"/span[contains(@class,'pic-text')]/text()\", \"dtUrl\": \"https://tv.ci/v/{vid}.html\", \"dtNode\": \"//div[contains(@class,'col-lg-wide-75')]\", \"dtName\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/@title\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='myui-content__thumb']/a[contains(@class,'myui-vodlist__thumb')]/img/@data-original\", \"dtImgR\": \"\\\\S+(http\\\\S+)\", \"dtCate\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '分类')]/following-sibling::*/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '年份')]/following-sibling::*/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '地区')]/following-sibling::*/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '更新')]/following-sibling::*/text()\", \"dtMarkR\": \"\", \"dtActor\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '主演')]/following-sibling::*/text()\", \"dtActorR\": \"\", \"dtDirector\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '导演')]/following-sibling::*/text()\", \"dtDirectorR\": \"\", \"dtDesc\": \"//div[@class='myui-content__detail']//span[contains(@class,'text-muted') and contains(text(), '简介')]/parent::text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//a[@data-toggle='tab' and contains(@href, 'playlist')]\", \"dtFromName\": \"/text()\", \"dtFromNameR\": \"\", \"dtUrlNode\": \"//div[contains(@class,'tab-content')]/div[contains(@id, 'playlist')]\", \"dtUrlSubNode\": \"//li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/p/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"https://tv.ci/p/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"https://tv.ci/index.php/ajax/suggest?mid=1&wd={wd}&limit=10\", \"scVodNode\": \"json:list\", \"scVodName\": \"name\", \"scVodId\": \"id\", \"scVodIdR\": \"\", \"scVodImg\": \"pic\", \"scVodMark\": \"\"}"
+    },
+    {
+      "key": "xpath-yinghua",
+      "name": "樱花动漫",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"http://www.yinghuacd.com\", \"cateManual\": {\"国产动漫\": \"guochandongman\", \"日本动漫\": \"ribendongman\", \"美国动漫\": \"meiguodongman\", \"动漫电影\": \"movie\", \"亲子动漫\": \"qinzi\"}, \"homeVodNode\": \"//div[@class='img']/ul/li\", \"homeVodName\": \"/p[@class='tname']/a/text()\", \"homeVodNameR\": \"\", \"homeVodId\": \"/a/@href\", \"homeVodIdR\": \"/show/(\\\\w+).html\", \"homeVodImg\": \"/a/img/@src\", \"homeVodImgR\": \"\", \"homeVodMark\": \"/p[contains(text(),'最新')]/a/text()\", \"homeVodMarkR\": \"\", \"cateUrl\": \"http://www.yinghuacd.com/{cateId}/\", \"cateVodNode\": \"//div[@class='imgs']/ul/li\", \"cateVodName\": \"/p[@class='tname']/a/text()\", \"cateVodId\": \"/a/@href\", \"cateVodIdR\": \"/show/(\\\\w+).html\", \"cateVodImg\": \"/a/img/@src\", \"cateVodMark\": \"/p[contains(text(),'最新')]/a/text()\", \"dtUrl\": \"http://www.yinghuacd.com/show/{vid}.html\", \"dtNode\": \"//div[@class='fire l']\", \"dtName\": \"//div[@class='thumb l']/img/@alt\", \"dtNameR\": \"\", \"dtImg\": \"//div[@class='thumb l']/img/@src\", \"dtImgR\": \"\", \"dtCate\": \"//div[@class='sinfo']//label[contains(text(),'类型')]/parent::*/a/text()\", \"dtCateR\": \"\", \"dtYear\": \"//div[@class='sinfo']//label[contains(text(),'上映')]/parent::*/a/text()\", \"dtYearR\": \"\", \"dtArea\": \"//div[@class='sinfo']//label[contains(text(),'地区')]/parent::*/a/text()\", \"dtAreaR\": \"\", \"dtMark\": \"//div[@class='sinfo']/p/text()\", \"dtMarkR\": \"\", \"dtDesc\": \"//div[@class='info']/text()\", \"dtDescR\": \"\", \"dtFromNode\": \"//div[contains(@class,'tabs')]/ul[@class='menu0']/li\", \"dtFromName\": \"/text()\", \"dtUrlNode\": \"//div[contains(@class,'movurl')]/ul\", \"dtUrlSubNode\": \"/li/a\", \"dtUrlId\": \"@href\", \"dtUrlIdR\": \"/v/(\\\\S+).html\", \"dtUrlName\": \"/text()\", \"dtUrlNameR\": \"\", \"playUrl\": \"http://www.yinghuacd.com/v/{playUrl}.html\", \"playUa\": \"\", \"searchUrl\": \"http://www.yinghuacd.com/search/{wd}\", \"scVodNode\": \"//div[@class='lpic']/ul/li\", \"scVodName\": \"/a/img/@alt\", \"scVodId\": \"/a/@href\", \"scVodIdR\": \"/show/(\\\\w+).html\", \"scVodImg\": \"/a/img/@src\", \"scVodMark\": \"//font[@class='red']/text()\"}"
+    },
+    {
+      "key": "xpath-yyds",
+      "name": "Yyds影视",
+      "type": 3,
+      "api": "csp_XPath",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "ext": "{\"ua\": \"\", \"homeUrl\": \"https://yyds.fans\", \"cateNode\": \"//div[contains(@class,'navbar-collapse')]/ul/li/a\", \"cateName\": \"/text()\", \"cateId\": \"/@href\", \"cateIdR\": \"\\\\S+cat=(\\\\d+)\", \"cateManual\": {}, \"homeVodNode\": \"//div[@class='list-card']//div[contains(@class, 'card-post')]\", \"homeVodName\": \"//div[@class='list-body']/a/text()\", \"homeVodNameR\": \"(.+) \\\\(\\\\S+\", \"homeVodId\": \"//div[@class='list-body']/a/@href\", \"homeVodIdR\": \"\\\\S+p=(\\\\d+)\", \"homeVodImg\": \"//a[@class='media-content']/@style\", \"homeVodImgR\": \"url\\\\('(\\\\S+)'\\\\)\", \"homeVodMark\": \"//div[@class='list-body']/a/text()\", \"homeVodMarkR\": \"\\\\S+\\\\) (.+)\", \"cateUrl\": \"https://yyds.fans/?paged={catePg}&cat={cateId}\", \"cateVodNode\": \"//div[@class='list-card']//div[contains(@class, 'card-post')]\", \"cateVodName\": \"//div[@class='list-body']/a/text()\", \"cateVodNameR\": \"(.+) \\\\(\\\\S+\", \"cateVodId\": \"//div[@class='list-body']/a/@href\", \"cateVodIdR\": \"\\\\S+p=(\\\\d+)\", \"cateVodImg\": \"//a[@class='media-content']/@style\", \"cateVodImgR\": \"url\\\\('(\\\\S+)'\\\\)\", \"cateVodMark\": \"//div[@class='list-body']/a/text()\", \"cateVodMarkR\": \"\\\\S+\\\\) (.+)\", \"dtUrl\": \"https://yyds.fans/?p={vid}\", \"dtNode\": \"//div[@class='post']\", \"dtName\": \"/div[contains(@class,'post-header')]/h1/text()\", \"dtNameR\": \"(.+) \\\\(\\\\S+\", \"dtImg\": \"/div[contains(@class,'post-content')]/p[1]/img/@src\", \"dtFromNode\": \"/nil\", \"dtUrlNode\": \"/nil\", \"playUa\": \"\", \"searchUrl\": \"https://yyds.fans/?s={wd}\", \"scVodNode\": \"//div[@class='list-card']//div[contains(@class, 'card-post')]\", \"scVodName\": \"//div[@class='list-body']/a/text()\", \"scVodNameR\": \"(.+) \\\\(\\\\S+\", \"scVodId\": \"//div[@class='list-body']/a/@href\", \"scVodIdR\": \"\\\\S+p=(\\\\d+)\", \"scVodImg\": \"//a[@class='media-content']/@style\", \"scVodImgR\": \"url\\\\('(\\\\S+)'\\\\)\", \"scVodMark\": \"//div[@class='list-body']/a/text()\", \"scVodMarkR\": \"\\\\S+\\\\) (.+)\"}"
+    },
+    {
+      "key": "Douban",
+      "name": "🐮【免费分享】🐮",
+      "type": 3,
+      "api": "csp_NewDouBanGuard",
+      "indexs": 1,
+      "searchable": 0,
+      "quickSearch": 0,
+      "filterable": 0,
+      "ext": "https://cdn.waimaimingtang.com/file/images/bwc/20260414181247-ae51abfbfe.txt",
+      "active": false
+    },
+    {
+      "key": "Doubanaaaa",
+      "name": "🐮【更新日期:20261010】🐮",
+      "type": 3,
+      "api": "csp_NewDouBanGuard",
+      "indexs": 1,
+      "searchable": 0,
+      "quickSearch": 0,
+      "filterable": 0,
+      "ext": "https://cdn.waimaimingtang.com/file/images/bwc/20260414181247-ae51abfbfe.txt",
+      "active": false
+    },
+    {
+      "key": "Wexconfig",
+      "name": "🐮配置┃中心🐮",
+      "type": 3,
+      "api": "csp_PanConfigGuard",
+      "searchable": 0,
+      "changeable": 0,
+      "indexs": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "MyPan",
+      "name": "🐮我的┃网盘🐮",
+      "type": 3,
+      "api": "csp_MyPanGuard",
+      "searchable": 0,
+      "changeable": 0,
+      "indexs": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "花卷",
+      "name": "💓花卷┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiNewHuaJuanGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "玩偶",
+      "name": "💓‍玩偶┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiNewWoggGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewGuanYing",
+      "name": "💓‍观影┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiNewGuanYingGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiQwMkv",
+      "name": "💓‍七味┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiQwMkvGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewPianKu",
+      "name": "💓盘库┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewPianKuGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewHuBan",
+      "name": "💓虎斑┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewHuBanGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewMuOu",
+      "name": "💓木偶┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewMuOuGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewDuoDuo",
+      "name": "💓多多┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewDuoDuoGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewKuaiYing",
+      "name": "💓快影┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewKuaiYingGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewLaBi",
+      "name": "💓蜡笔┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewLaBiGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewShanDian",
+      "name": "💓闪电┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewShanDianGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewJuTou",
+      "name": "💓剧透┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewJuTouGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewLibvio",
+      "name": "💓立播┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewLibvioGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "原盘",
+      "name": "💓‍原盘┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiNewZhiNan4KGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "蜗牛",
+      "name": "💓‍蜗牛┃4K💓‍",
+      "type": 3,
+      "api": "csp_AiNewWoNiu4KGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiPan1Me",
+      "name": "💓盘迷┃4K💓",
+      "type": 3,
+      "api": "csp_AiPan1MeGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AiNewYiDong4K",
+      "name": "💓逸动┃4K💓",
+      "type": 3,
+      "api": "csp_AiNewYiDong4KGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexHanXiaoQuan",
+      "name": "💥韩剧┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiHanXiaoQuanGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiGuaZi",
+      "name": "💥瓜子┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiGuaZiGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiDuBoKu",
+      "name": "💥独播┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiDuBoKuGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiYueYue",
+      "name": "💥闪电┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiYueYueGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiWenCai",
+      "name": "💥文才┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiWenCaiGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexFengYe4K",
+      "name": "💥小枫┃秒播💥",
+      "type": 3,
+      "api": "csp_WexFengYe4KGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "賤賤",
+      "name": "💥贱片┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiJianPianGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 大师兄",
+      "name": "💥师兄┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Dsx",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 粉猪追剧",
+      "name": "💥粉猪┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Fz",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 咸鱼",
+      "name": "💥咸鱼┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Xy",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 追剧达人",
+      "name": "💥追剧┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Zjdr",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 小柚子",
+      "name": "💥柚子┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Xyz",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 小柠檬",
+      "name": "💥柠檬┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Xnm",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 蒙太奇",
+      "name": "💥太奇┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Mtq",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 零零七影视",
+      "name": "💥零七┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Llq",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 小柿子",
+      "name": "💥柿子┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Xsz",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "AppV7 | 小黄人",
+      "name": "💥黄人┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAppV7Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "ext": {
+        "config": "AppV7Xhr",
+        "proxyImg": false
+      },
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "WexAiYiYs",
+      "name": "💥伊影┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiYiYsGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiReBo",
+      "name": "💥热播┃秒播💥",
+      "type": 3,
+      "api": "csp_WexAiReBoGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiBoBo",
+      "name": "🎇伯伯┃秒播🎇",
+      "type": 3,
+      "api": "csp_WexAiBoBoGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "WexAiIkanBot",
+      "name": "🎇爱看┃采集🎇",
+      "type": 3,
+      "api": "csp_WexAiIkanBotGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "LiveAiHuYa",
+      "name": "🐯‍虎牙┃直播🐯‍",
+      "type": 3,
+      "api": "csp_LiveAiHuYaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "LiveAiDouYu",
+      "name": "🐳斗鱼┃直播🐳",
+      "type": 3,
+      "api": "csp_LiveAiDouYuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "LiveAiBiLi",
+      "name": "🅱️哔哩┃直播🅱️",
+      "type": 3,
+      "api": "csp_LiveAiBiLiGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ManJuAiHongGuo",
+      "name": "🍉漫短┃小红🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_ManJuAiHongGuoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ManJuAiHuoLong",
+      "name": "🍉漫剧┃小龙🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_ManJuAiHuoLongGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ManJuAiQiMao",
+      "name": "🍉漫剧┃小猫🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_ManJuAiQiMaoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ManJuAiXiFan",
+      "name": "🍉漫短┃小喜🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_ManJuAiXiFanGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ManJuAiHeMa",
+      "name": "🍉漫短┃小马🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_ManJuAiHeMaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "DuanJuAiHaoKan",
+      "name": "🍉短剧┃好看🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_DuanJuAiHaoKanGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "DuanJuAiQiMiao",
+      "name": "🍉短剧┃小猫🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_DuanJuAiQiMiaoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "DuanJuAiXingYa",
+      "name": "🍉短剧┃星星🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_DuanJuAiXingYaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "DuanJuAiWeiGuan",
+      "name": "🍉短剧┃小薇🍉",
+      "type": 3,
+      "类型": "短剧",
+      "api": "csp_DuanJuAiWeiGuanGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AnimeXiFan",
+      "name": "🤡稀饭┃动漫🤡",
+      "type": 3,
+      "api": "csp_AnimeXiFanGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AnimeCiYuanCheng",
+      "name": "🤡次元┃动漫🤡",
+      "type": 3,
+      "api": "csp_AnimeCiYuanChengGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "AnimeAiMoDu",
+      "name": "🤡魔都┃动漫🤡",
+      "type": 3,
+      "api": "csp_AnimeAiMoDuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "BookHongGuo",
+      "name": "🎃‍小红┃听书🎃",
+      "type": 3,
+      "api": "csp_BookHongGuoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "BookHeMa",
+      "name": "🎃‍小马┃听书🎃",
+      "type": 3,
+      "api": "csp_BookHeMaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "BookAiShiJie",
+      "name": "🎃‍极品┃听书🎃",
+      "type": 3,
+      "api": "csp_BookAiShiJieGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "BookAiYueTing",
+      "name": "🎃‍悦庭┃听书🎃",
+      "type": 3,
+      "api": "csp_BookAiYueTingGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "timeout": 120,
+      "active": false
+    },
+    {
+      "key": "BookAi23TingShu",
+      "name": "🎃‍爱上┃听书🎃",
+      "type": 3,
+      "api": "csp_BookAi23TingShuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "ChildrenAiBaoBao",
+      "name": "👼宝宝┃儿歌👼",
+      "type": 3,
+      "api": "csp_ChildrenAiBaoBaoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 2
+      },
+      "active": false
+    },
+    {
+      "key": "ChildrenAiBeiWa",
+      "name": "👼贝贝┃儿歌👼",
+      "type": 3,
+      "api": "csp_ChildrenAiBeiWaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 2
+      },
+      "active": false
+    },
+    {
+      "key": "ChildrenAiTuTu",
+      "name": "👼兔兔┃儿歌👼",
+      "type": 3,
+      "api": "csp_ChildrenAiTuTuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 2
+      },
+      "active": false
+    },
+    {
+      "key": "MusicAiTangDou",
+      "name": "💃跳舞┃教学💃",
+      "type": 3,
+      "api": "csp_MusicAiTangDouGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 2
+      },
+      "active": false
+    },
+    {
+      "key": "MusicAiLiYuan",
+      "name": "🎎戏曲┃秒播🎎",
+      "type": 3,
+      "api": "csp_MusicAiLiYuanGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 2
+      },
+      "active": false
+    },
+    {
+      "key": "MusicAiQingTing",
+      "name": "🎼蜻蜓┃电台🎼",
+      "type": 3,
+      "api": "csp_MusicAiQingTingGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "MusicAiIKtv",
+      "name": "🎼KTV┃音乐🎼",
+      "type": 3,
+      "api": "csp_MusicAiIKtvGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "MusicAiKuWoa",
+      "name": "🎼小酷┃音乐🎼",
+      "type": 3,
+      "api": "csp_MusicAiKuWoaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "MusicAi163",
+      "name": "🎼易听┃音乐🎼",
+      "type": 3,
+      "api": "csp_MusicAi163Guard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "MusicAiKuWo",
+      "name": "🎼酷听┃音乐🎼",
+      "type": 3,
+      "api": "csp_MusicAiKuWoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "MusicAiLunHui",
+      "name": "🎼轮回┃舞曲🎼",
+      "type": 3,
+      "api": "csp_MusicAiLunHuiGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SportAiFeiQiu",
+      "name": "🌐飞球┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiFeiQiuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "SportAiGuaZi",
+      "name": "🌐瓜子┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiGuaZiGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "SportAiKanQiuTong",
+      "name": "🌐球通┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiKanQiuTongGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "SportAiKanqiu",
+      "name": "🌐八八┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiKanqiuGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SportAiKaFei",
+      "name": "🌐咖啡┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiKaFeiGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "SportAiWwe",
+      "name": "🌐WWE┃体育🌐",
+      "type": 3,
+      "api": "csp_SportAiWweGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "FakeAi115Share",
+      "name": "💓115┃分享💓‍",
+      "type": 3,
+      "api": "csp_FakeAi115ShareGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "timeout": 50,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "Emby",
+      "name": "💓Emby┃4K💓",
+      "type": 3,
+      "api": "csp_EmbyGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "Emby001",
+      "name": "💓Emby001┃4K💓",
+      "type": 3,
+      "api": "csp_EmbyDiyGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 0,
+      "ext": {
+        "embynumber": 0
+      },
+      "active": false
+    },
+    {
+      "key": "AList",
+      "name": "👁️Alist┃DIY👁️",
+      "type": 3,
+      "api": "csp_AListGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "webdav",
+      "name": "👁️WebDav┃DIY👁️",
+      "type": 3,
+      "api": "csp_WebDAVGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "DiyVod",
+      "name": "👁Vod┃DIY👁️",
+      "type": 3,
+      "api": "csp_DiyVodGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "list"
+      },
+      "active": false
+    },
+    {
+      "key": "biliys",
+      "name": "🅱哔哩┃影视🅱",
+      "type": 3,
+      "api": "csp_BiliYsGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "active": false
+    },
+    {
+      "key": "bilibili",
+      "name": " 🅱‍哔哩┃合集🅱‍",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 1.433
+      },
+      "ext": {
+        "json": "https://support-chat.rongcloud.cn/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBYkE9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--47a8ff0e68559a89a9a75b37d09a2b0854dc5a8a/bili001.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "bilixiqu",
+      "name": " 🅱‍哔哩┃戏曲🅱‍",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 1.433
+      },
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaImage/183E562_773_xiqu_20251130182006749newMediaImage.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "biliych",
+      "name": " 🅱‍哔哩┃歌曲🅱‍",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1,
+      "changeable": 0,
+      "style": {
+        "type": "rect",
+        "ratio": 1.433
+      },
+      "ext": {
+        "json": "https://support-chat.rongcloud.cn/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBYkU9IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--3083f43a14e6b59f4bfe248478a3a8765b34bfdd/bilisong.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "少儿教育",
+      "name": "📚少儿┃教育📚",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "style": {
+        "type": "rect",
+        "ratio": 1.597
+      },
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaImage/3C3AB7A_773_ertong_20250828171550247newMediaImage.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "小学课堂",
+      "name": "📚小学┃课堂📚",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "style": {
+        "type": "rect",
+        "ratio": 1.597
+      },
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaImage/4A3AA71_773_xiaoxue_20250828171535645newMediaImage.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "初中课堂",
+      "name": "📚初中┃课堂📚",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "style": {
+        "type": "rect",
+        "ratio": 1.597
+      },
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaImage/19B1839_773_chuzhong_20250828171521929newMediaImage.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "高中教育",
+      "name": "📚高中┃课堂📚",
+      "type": 3,
+      "api": "csp_BiliGuard",
+      "style": {
+        "type": "rect",
+        "ratio": 1.597
+      },
+      "searchable": 0,
+      "quickSearch": 0,
+      "changeable": 0,
+      "ext": {
+        "json": "https://storage.7x24cc.com/storage-server/presigned/ss1/a6-online-fileupload/newMediaImage/345A587_773_gaozhong_20250828171449997newMediaImage.txt"
+      },
+      "active": false
+    },
+    {
+      "key": "SoAiHaiYin",
+      "name": "🎠盘搜┃综合🎠",
+      "type": 3,
+      "api": "csp_SoAiHaiYinGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SoAiPanSoo",
+      "name": "🎠九七┃综合🎠",
+      "type": 3,
+      "api": "csp_SoAiPanSooGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SoAiQuPanShe",
+      "name": "🎠趣搜┃百度🎠",
+      "type": 3,
+      "api": "csp_SoAiQuPanSheGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SoAiAiPanSo",
+      "name": "🎠爱盘┃综合🎠",
+      "type": 3,
+      "api": "csp_SoAiAiPanSoGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "SoKaKa",
+      "name": "🎠卡卡┃综合🎠",
+      "type": 3,
+      "api": "csp_SoKaKaGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    },
+    {
+      "key": "push_agent",
+      "name": "推送",
+      "type": 3,
+      "api": "csp_PushGuard",
+      "searchable": 1,
+      "changeable": 0,
+      "active": false
+    }
+  ],
+  "parses": [
+    {
+      "name": "王",
+      "type": 1,
+      "url": "http://122.228.84.103:7777/api/?key=4Dk5tdayvY6NZufEMG&url="
+    },
+    {
+      "name": "二",
+      "type": 1,
+      "url": "http://110.42.7.182:880/api/?key=7e84f07dc78fbb3406d64a1ab7d966b3&url="
+    },
+    {
+      "name": "小",
+      "type": 1,
+      "url": "http://43.136.176.188:91/api/?key=4ef232e96172b0bda78d393c695fe7c4&url="
+    },
+    {
+      "name": "帅",
+      "type": 1,
+      "url": "http://pan.qiaoji8.com/tvbox/neibu.php?url="
+    }
+  ],
+  "doh": [
+    {
+      "name": "Google",
+      "url": "https://dns.google/dns-query",
+      "ips": [
+        "8.8.4.4",
+        "8.8.8.8"
+      ]
+    },
+    {
+      "name": "Cloudflare",
+      "url": "https://cloudflare-dns.com/dns-query",
+      "ips": [
+        "1.1.1.1",
+        "1.0.0.1",
+        "2606:4700:4700::1111",
+        "2606:4700:4700::1001"
+      ]
+    },
+    {
+      "name": "AdGuard",
+      "url": "https://dns.adguard.com/dns-query",
+      "ips": [
+        "94.140.14.140",
+        "94.140.14.141"
+      ]
+    },
+    {
+      "name": "DNSWatch",
+      "url": "https://resolver2.dns.watch/dns-query",
+      "ips": [
+        "84.200.69.80",
+        "84.200.70.40"
+      ]
+    },
+    {
+      "name": "Quad9",
+      "url": "https://dns.quad9.net/dns-quer",
+      "ips": [
+        "9.9.9.9",
+        "149.112.112.112"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "name": "proxy",
+      "hosts": [
+        "hlsztemgsplive.miguvideo.com=hlsztemgsplive.188766.xyz",
+        "cache.ott.fifalive.itv.cmvideo.cn=fifalive.188766.xyz",
+        "iptv.huuc.edu.cn=huucv6.188766.xyz",
+        "raw.githubusercontent.com",
+        "googlevideo.com",
+        "cdn.v82u1l.com",
+        "cdn.iz8qkg.com",
+        "cdn.kin6c1.com",
+        "c.biggggg.com",
+        "c.olddddd.com",
+        "haiwaikan.com",
+        "www.histar.tv",
+        "youtube.com",
+        "uhibo.com",
+        ".*boku.*",
+        ".*nivod.*",
+        ".*ulivetv.*"
+      ]
+    },
+    {
+      "name": "海外看",
+      "hosts": [
+        "haiwaikan"
+      ],
+      "regex": [
+        "10.0099",
+        "10.3333",
+        "16.0599",
+        "8.1748",
+        "12.33",
+        "10.85"
+      ]
+    },
+    {
+      "name": "火山嗅探",
+      "hosts": [
+        "huoshan.com"
+      ],
+      "regex": [
+        "item_id="
+      ]
+    },
+    {
+      "name": "抖音嗅探",
+      "hosts": [
+        "douyin.com"
+      ],
+      "regex": [
+        "is_play_url="
+      ]
+    },
+    {
+      "name": "農民嗅探",
+      "hosts": [
+        "toutiaovod.com"
+      ],
+      "regex": [
+        "video/tos/cn"
+      ]
+    },
+    {
+      "name": "新视觉嗅探",
+      "hosts": [
+        "muzhi-video.bj.bcebos.com"
+      ],
+      "regex": [
+        "202403/"
+      ]
+    },
+    {
+      "name": "七新嗅探",
+      "hosts": [
+        "api.52wyb.com"
+      ],
+      "regex": [
+        "m3u8?pt=m3u8"
+      ]
+    },
+    {
+      "name": "夜市點擊",
+      "hosts": [
+        "yeslivetv.com"
+      ],
+      "script": [
+        "document.getElementsByClassName('vjs-big-play-button')[0].click()"
+      ]
+    },
+    {
+      "name": "毛驢點擊",
+      "hosts": [
+        "www.maolvys.com"
+      ],
+      "script": [
+        "document.getElementsByClassName('swal-button swal-button--confirm')[0].click()"
+      ]
+    }
+  ],
+  "ads": [
+    "mozai.4gtv.tv",
+    "pv.vipwm.cc",
+    "static-mozai.4gtv.tv"
+  ],
+  "lives": [
+    {
+      "name": "Kimentanm",
+      "type": 0,
+      "url": "https://down.nigx.cn/raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+      "playerType": 2
+    },
+    {
+      "name": "综合直播",
+      "type": 0,
+      "playerType": 2,
+      "url": "http://193.123.86.190:14888/TV/iptv.php",
+      "ua": "bingcha/1.1 (mianfeifenxiang) "
+    }
+  ],
+  "headers": [
+    {
+      "host": "hlsztemgsplive.miguvideo.com",
+      "header": {
+        "User-Agent": "bingcha/1.1 (mianfeifenxiang) "
+      }
+    }
+  ]
+}

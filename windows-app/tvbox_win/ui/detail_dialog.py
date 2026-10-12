@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from ..crawler import fetch_bytes, fetch_detail, resolve_play_url
+from ..crawler import fetch_bytes, fetch_detail, fetch_play_url, is_spider, resolve_play_url
 from ..models import SourceBean, VodInfo
 
 
@@ -36,6 +36,30 @@ class _DetailWorker(QThread):
             self.done.emit(VodInfo())
 
 
+class _PlayWorker(QThread):
+    """Resolve the real stream URL of one episode on a background thread.
+
+    Spider sources (`csp_*`) keep only a play id in `vod_play_url`; the actual
+    address comes from `playerContent(flag, id)` inside the JVM runtime.
+    """
+
+    done = Signal(object, str)  # url or None, error message
+
+    def __init__(self, source: SourceBean, flag: str, entry: str) -> None:
+        super().__init__()
+        self._s = source
+        self._flag = flag
+        self._entry = entry
+
+    def run(self) -> None:  # noqa: D102
+        try:
+            url = fetch_play_url(self._s, self._flag, self._entry)
+        except Exception as e:  # noqa: BLE001
+            self.done.emit(None, f"{type(e).__name__}: {e}")
+            return
+        self.done.emit(url, "" if url else "爬虫未返回可播放地址（可能需要解析器或该剧集已失效）")
+
+
 class DetailDialog(QDialog):
     """Show content detail and let the user pick an episode to play."""
 
@@ -45,7 +69,9 @@ class DetailDialog(QDialog):
         self.v = vod
         self.selected_url = ""
         self._detail: VodInfo = vod
+        self._current_url = None
         self._worker: Optional[_DetailWorker] = None
+        self._play_worker: Optional[_PlayWorker] = None
         self.setWindowTitle(vod.vod_name or "详情")
         self.resize(880, 600)
         self._build()
@@ -98,6 +124,12 @@ class DetailDialog(QDialog):
         right.addStretch(1)
         bottom.addLayout(right)
         layout.addLayout(bottom)
+
+        self.ep_hint = QLabel()
+        self.ep_hint.setWordWrap(True)
+        self.ep_hint.setStyleSheet("color:#B00020;")
+        self.ep_hint.hide()
+        layout.addWidget(self.ep_hint)
 
     def _episodes(self) -> List[str]:
         if not self._detail.vod_play_url:
@@ -183,10 +215,35 @@ class DetailDialog(QDialog):
         data = item.data(Qt.UserRole)
         if data is None:
             return
-        _idx, ep = data
+        idx, ep = data
+        self._current_url = None
+        if is_spider(self.source):
+            # 爬虫源的选集只有播放 id，需要向 JVM 运行时请求真实地址
+            sources = self._detail.play_sources
+            flag = sources[idx] if 0 <= idx < len(sources) else ""
+            self.ep_hint.hide()
+            self.play_btn.setEnabled(False)
+            self.play_btn.setText("▶ 解析中…")
+            self._play_worker = _PlayWorker(self.source, flag, str(ep))
+            self._play_worker.done.connect(self._on_play_url)
+            self._play_worker.start()
+            return
         url = resolve_play_url(str(ep)) or str(ep)
         self._current_url = url if url.startswith("http") else None
         self.play_btn.setEnabled(self._current_url is not None)
+
+    def _on_play_url(self, url, error: str) -> None:
+        """Callback for the spider playerContent lookup."""
+        self.play_btn.setText("▶ 播放")
+        if url:
+            self._current_url = url
+            self.play_btn.setEnabled(True)
+            self.ep_hint.hide()
+            return
+        self._current_url = None
+        self.play_btn.setEnabled(False)
+        self.ep_hint.setText(error or "未能解析出播放地址。")
+        self.ep_hint.show()
 
     def _accept_play(self) -> None:
         url = getattr(self, "_current_url", None)

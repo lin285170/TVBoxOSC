@@ -216,8 +216,16 @@ class MainWindow(QMainWindow):
             if not s.active:
                 continue
             label = s.name or s.key
-            if not crawl.is_supported(s):
-                label = f"{label}（爬虫源·不支持）"
+            if crawl.is_spider(s):
+                # 爬虫源需要捆绑的 JVM 运行时；缺失时如实标注，避免静默空列表
+                if not crawl.spider_available():
+                    label = f"{label}（爬虫源·缺少运行时）"
+            elif crawl.is_js_source(s):
+                # JS 规则源需要捆绑的 Node 运行时
+                if not crawl.js_available():
+                    label = f"{label}（JS源·缺少运行时）"
+            elif not crawl.is_supported(s):
+                label = f"{label}（不支持）"
             self.source_combo.addItem(label, s.key)
         if self.source_combo.count():
             self.source_combo.setCurrentIndex(0)

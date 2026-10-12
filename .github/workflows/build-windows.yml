@@ -19,6 +19,10 @@ defaults:
   run:
     shell: pwsh
 
+env:
+  NODE_VERSION: "22.22.2"
+  JDK_VERSION: "21"
+
 jobs:
   build:
     runs-on: windows-latest
@@ -41,6 +45,14 @@ jobs:
         with:
           python-version: "3.12"
 
+      # jlink 需要一个完整 JDK（不是 JRE），用于生成捆绑的精简 JRE
+      - name: Setup JDK (for jlink)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JDK_VERSION }}
+          architecture: x64
+
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -59,7 +71,17 @@ jobs:
       - name: Smoke test (imports resolve)
         working-directory: windows-app
         run: |
-          python -c "import tvbox_win, tvbox_win.crawler, tvbox_win.parser, tvbox_win.models, tvbox_win.config, tvbox_win.ui.main_window, tvbox_win.ui.detail_dialog, tvbox_win.ui.player_dialog, tvbox_win.ui.source_dialog; from tvbox_win.ui.main_window import MainWindow; print('IMPORTS_OK')"
+          python -c "import tvbox_win, tvbox_win.crawler, tvbox_win.parser, tvbox_win.models, tvbox_win.config, tvbox_win.spider_bridge, tvbox_win.js_bridge, tvbox_win.ui.main_window, tvbox_win.ui.detail_dialog, tvbox_win.ui.player_dialog, tvbox_win.ui.source_dialog; from tvbox_win.ui.main_window import MainWindow; print('IMPORTS_OK')"
+
+      # ---- 爬虫运行时冒烟测试（本地 HTTP 站点，无需外网）----
+      # 用系统 JDK 跑 JVM spider 链路；Node 已随 runner 自带
+      - name: Runtime smoke test (CatVod spider / JVM)
+        working-directory: windows-app
+        run: python spider_smoke.py
+
+      - name: Runtime smoke test (JS rule source / Node)
+        working-directory: windows-app
+        run: python js_smoke.py
 
       - name: Build app (PyInstaller onedir)
         working-directory: windows-app
@@ -78,6 +100,32 @@ jobs:
             throw "dist/TVBoxOSC/TVBoxOSC.exe not found"
           }
           Get-ChildItem dist/TVBoxOSC | Select-Object Name, Length
+
+      # ---- 装配爬虫运行时：jlink 精简 JRE + Node + spider jar + host.js ----
+      - name: Assemble crawler runtime (jlink JRE + Node + spider jar)
+        working-directory: windows-app
+        run: |
+          ./scripts/prepare_runtime.ps1 -AppDir dist/TVBoxOSC -NodeVersion $env:NODE_VERSION
+
+      - name: Verify bundled runtime layout
+        working-directory: windows-app
+        run: |
+          $need = @('dist/TVBoxOSC/jre/bin/java.exe',
+                    'dist/TVBoxOSC/node/node.exe',
+                    'dist/TVBoxOSC/spider/spider-runtime.jar',
+                    'dist/TVBoxOSC/js-runtime/host.js')
+          foreach ($f in $need) {
+            if (-not (Test-Path $f)) { throw "missing bundled runtime file: $f" }
+            Get-Item $f | Select-Object FullName, Length
+          }
+          $total = [math]::Round(((Get-ChildItem dist/TVBoxOSC -Recurse |
+                     Measure-Object Length -Sum).Sum / 1MB), 1)
+          Write-Host "dist/TVBoxOSC total size: $total MB"
+
+      # 用「打包后的目录布局」再跑一遍两个运行时，确认安装包形态下可用
+      - name: Verify packaged runtime layout works
+        working-directory: windows-app
+        run: python packaged_verify.py dist/TVBoxOSC
 
       - name: Pack portable zip
         working-directory: windows-app
@@ -133,6 +181,7 @@ jobs:
           files: |
             windows-app/dist/*.zip
             windows-app/installer/output/*.exe
+            windows-app/spider-runtime/dist/spider-runtime.jar
           body: |
             ## TVBoxOSC for Windows ${{ env.APP_VERSION }}
 
@@ -141,6 +190,15 @@ jobs:
 
             ### 便携版
             - `TVBoxOSC-*-portable.zip` — 解压即用，无需安装。
+
+            ### 爬虫运行时
+            - `spider-runtime.jar` — CatVod spider（`csp_*` Java 爬虫）运行时，等价配置的 `spider` 字段指向本资产；桌面版已内置，无需手动下载。
+
+            ### 内置爬虫运行时
+            - `jre/` 精简 JRE（jlink）—— 运行 `csp_*` Java 爬虫，用户无需自装 Java
+            - `node/node.exe` —— 运行 `js:` JS 规则源
+            - `spider/spider-runtime.jar`、`js-runtime/host.js` —— 两个运行时宿主
+            - `config/tvbox-win.json` —— 等效配置（官方 XPath 规则源 + 公开 HTTP 接口源）
 
             系统要求：Windows 10/11 x64
           generate_release_notes: true

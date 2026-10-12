@@ -6,12 +6,20 @@ Implements the TVBox `?ac=` style JSON/XML source api (site `type: 1`):
   - `?ac=videolist&wd=X&pg=N`      -> search
   - `?ac=detail&ids=X`             -> play detail
 
-Note: TVBox configs whose sites are `type: 3` (api like `csp_xxx`) are CatVod
-spider sources and require the bundled spider jar/JS runtime. This desktop app
-does not embed that runtime, so those sources are reported as unsupported.
+CatVod spider sources (`type: 3`, api `csp_*`) are handled by the bundled
+JVM runtime (see `spider_bridge`): the spider's `com.github.catvod.spider.*`
+class is loaded inside a resident JVM and driven over a JSON line protocol.
+
+JS rule sources (`type: 3`, api `js:*`) are handled by the bundled Node runtime
+(see `js_bridge`): the rule file is executed inside a resident Node process,
+also driven over a JSON line protocol.
+
+Both runtimes return the same JSON shape as the `?ac=` api, so the parsing layer
+is shared.
 """
 import json
 import logging
+import os
 import re
 from typing import List, Optional
 from urllib.parse import unquote, urlencode
@@ -28,6 +36,8 @@ from .parser import (
     parse_vod_json,
     parse_vod_xml,
 )
+from .js_bridge import JsRuntimeError, get_js_runtime
+from .spider_bridge import SpiderRuntimeError, get_runtime
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +46,9 @@ UA = (
     "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 )
 TIMEOUT = 20
+
+SPIDER_PREFIX = "csp_"
+JS_PREFIXES = ("js:", "drpy:")
 
 
 def _session() -> requests.Session:
@@ -59,8 +72,32 @@ def normalize_url(url: str) -> str:
     return url
 
 
+_SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.\-]*://")
+
+
+def read_local(path: str) -> Optional[str]:
+    """Read a local text file (supports `file://` and bare filesystem paths)."""
+    p = path
+    if p.lower().startswith("file://"):
+        p = p[7:]
+        if re.match(r"^/[a-zA-Z]:", p):   # file:///C:/x -> C:/x
+            p = p[1:]
+    p = os.path.expanduser(p)
+    if os.path.isfile(p):
+        with open(p, "r", encoding="utf-8", errors="replace") as f:
+            return f.read()
+    return None
+
+
 def fetch_text(url: str) -> Optional[str]:
-    """Fetch text from a URL (handles clan:// / proxy:// prefixes)."""
+    """Fetch text from a URL (handles clan:// / proxy:// prefixes).
+
+    A bare filesystem path or `file://` URL is read from disk instead of HTTP,
+    so a locally saved 配置文件 can be loaded directly.
+    """
+    text = read_local(url)
+    if text is not None:
+        return text
     url = normalize_url(url)
     if not url:
         return None
@@ -94,15 +131,58 @@ def load_config(api_url: str) -> List[SourceBean]:
 
 # ---------------- Source api (per source) ----------------
 
-def is_supported(source: Optional[SourceBean]) -> bool:
-    """Whether this desktop app can talk to the source directly.
+def is_spider(source: Optional[SourceBean]) -> bool:
+    """Whether this source is a CatVod spider source (`type: 3`, api `csp_*`)."""
+    if not source:
+        return False
+    try:
+        stype = int(source.type or 0)
+    except (TypeError, ValueError):
+        stype = 0
+    return stype == 3 and str(source.api or "").strip().startswith(SPIDER_PREFIX)
 
-    Only `type: 1` (JSON/XML HTTP api) sources are supported. `type: 3`
-    (`csp_*`) sources need the CatVod spider jar/JS runtime, which is not
-    bundled here.
+
+def is_js_source(source: Optional[SourceBean]) -> bool:
+    """Whether this source is a JS rule source (`type: 3`, api `js:*` / `drpy:*`)."""
+    if not source:
+        return False
+    try:
+        stype = int(source.type or 0)
+    except (TypeError, ValueError):
+        stype = 0
+    return stype == 3 and str(source.api or "").strip().startswith(JS_PREFIXES)
+
+
+def spider_available() -> bool:
+    """Whether the bundled JVM spider runtime can be located & launched."""
+    try:
+        return get_runtime().available
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def js_available() -> bool:
+    """Whether the bundled Node JS runtime can be located & launched."""
+    try:
+        return get_js_runtime().available
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def is_supported(source: Optional[SourceBean]) -> bool:
+    """Whether this desktop app can talk to the source.
+
+    - `type: 1` (JSON/XML HTTP api): supported directly.
+    - `type: 3` (`csp_*`): supported through the bundled CatVod spider runtime,
+      provided the JVM runtime (bundled JRE + spider-runtime.jar) is present.
+    - `type: 3` (`js:*`): supported through the bundled Node JS runtime.
     """
     if not source:
         return False
+    if is_spider(source):
+        return spider_available()
+    if is_js_source(source):
+        return js_available()
     try:
         stype = int(source.type or 0)
     except (TypeError, ValueError):
@@ -115,15 +195,91 @@ def unsupported_reason(source: Optional[SourceBean]) -> str:
     if not source:
         return "未选择来源。"
     api = str(source.api or "")
+    if is_spider(source):
+        runtime = get_runtime()
+        return (
+            "该来源是 CatVod 爬虫源（type=3，api='"
+            f"{api}'），需要 JVM 爬虫运行时，但当前未找到可用运行时。\n\n"
+            f"诊断信息：{runtime.describe()}\n\n"
+            "安装包版本会自带精简 JRE 与 spider-runtime.jar；"
+            "源码运行请在 windows-app/spider-runtime 下执行构建脚本生成 jar。"
+        )
+    if is_js_source(source):
+        runtime = get_js_runtime()
+        return (
+            "该来源是 JS 规则源（type=3，api='"
+            f"{api}'），需要 Node JS 运行时，但当前未找到可用运行时。\n\n"
+            f"诊断信息：{runtime.describe()}\n\n"
+            "安装包版本会自带 Node 与 js-runtime/host.js；"
+            "源码运行请安装 Node.js 或把 node 放到 PATH。"
+        )
     if not api.startswith("http"):
         return (
-            f"该来源是爬虫源（type={source.type}，api='{api}'），"
-            "需要 TVBox spider（jar / JS）运行环境，当前 Windows 桌面版未内置该运行时。\n\n"
+            f"该来源需要 TVBox spider 运行环境（type={source.type}，api='{api}'），"
+            "当前 Windows 桌面版暂不支持该类型。\n\n"
             "请改用 JSON 接口源：在顶部「接口配置」粘贴源接口地址"
             "（形如 https://xxx/api.php/provide/vod/），"
-            "或粘贴包含 type=1 源的配置文件，然后重新加载。"
+            "或粘贴包含 type=1 / type=3(csp_) 源的配置文件，然后重新加载。"
         )
     return f"暂不支持的来源类型 type={source.type}。"
+
+
+# ---------------- CatVod spider 桥 ----------------
+
+def _spider_call(source: SourceBean, **request) -> str:
+    """Send one request to the resident spider JVM, returning the raw payload.
+
+    Raises RuntimeError with a readable message on any failure so the UI can
+    surface the actual reason instead of showing an empty grid.
+    """
+    runtime = get_runtime()
+    if not runtime.available:
+        raise RuntimeError(runtime.describe())
+    api = str(source.api or "").strip()
+    ext = source.ext or None
+    try:
+        resp = runtime.call(api=api, ext=ext, **request)
+    except SpiderRuntimeError as e:
+        raise RuntimeError(str(e)) from e
+    if not resp.get("ok"):
+        raise RuntimeError(resp.get("error") or "爬虫调用失败")
+    return resp.get("data") or ""
+
+
+def _js_call(source: SourceBean, **request) -> str:
+    """Send one request to the resident Node JS runtime, returning raw payload."""
+    runtime = get_js_runtime()
+    if not runtime.available:
+        raise RuntimeError(runtime.describe())
+    api = str(source.api or "").strip()
+    ext = source.ext or None
+    base_dir = request.pop("base_dir", None)
+    try:
+        resp = runtime.call(api=api, ext=ext, baseDir=base_dir, **request)
+    except JsRuntimeError as e:
+        raise RuntimeError(str(e)) from e
+    if not resp.get("ok"):
+        raise RuntimeError(resp.get("error") or "JS 规则源调用失败")
+    return resp.get("data") or ""
+
+
+def _source_call(source: SourceBean, **request) -> str:
+    """Dispatch a call to whichever bundled runtime the source needs."""
+    if is_spider(source):
+        return _spider_call(source, **request)
+    if is_js_source(source):
+        return _js_call(source, **request)
+    raise RuntimeError(unsupported_reason(source))
+
+
+def _dynamic(source: Optional[SourceBean]) -> bool:
+    """Whether the source is served by a bundled rule runtime (JVM or Node)."""
+    return is_spider(source) or is_js_source(source)
+
+
+def _source_result(source: SourceBean, request: dict, page: int) -> VodResult:
+    """Call a rules-engine listing action and parse the response into a VodResult."""
+    return _parse_vod_response(_source_call(source, **request), page)
 
 
 def fetch_classes(source: SourceBean) -> List[dict]:
@@ -164,18 +320,32 @@ def _parse_vod_response(text: Optional[str], page: int = 1) -> VodResult:
 
 def fetch_home(source: SourceBean, page: int = 1) -> VodResult:
     """Home page: `?ac=list&pg=N` returns the class list plus newest content."""
+    if _dynamic(source):
+        return _source_result(source, {"action": "home", "filter": True}, page)
     url = _join(source.api, {"ac": "list", "pg": str(page)})
     return _parse_vod_response(fetch_text(url), page)
 
 
 def fetch_category(source: SourceBean, tid: str, page: int = 1) -> VodResult:
     """One category page: `?ac=videolist&t=<type_id>&pg=N`."""
+    if _dynamic(source):
+        return _source_result(
+            source,
+            {"action": "category", "tid": str(tid), "pg": str(page), "filter": True},
+            page,
+        )
     url = _join(source.api, {"ac": "videolist", "t": str(tid), "pg": str(page)})
     return _parse_vod_response(fetch_text(url), page)
 
 
 def fetch_search(source: SourceBean, wd: str, page: int = 1) -> VodResult:
     """Search page: `?ac=videolist&wd=<keyword>&pg=N`."""
+    if _dynamic(source):
+        return _source_result(
+            source,
+            {"action": "search", "key": wd, "quick": False, "pg": str(page)},
+            page,
+        )
     url = _join(source.api, {"ac": "videolist", "wd": wd, "pg": str(page)})
     return _parse_vod_response(fetch_text(url), page)
 
@@ -206,6 +376,15 @@ def fetch_vods(source: SourceBean, page: int = 1, wd: str = "", t: str = "") -> 
 
 def fetch_detail(source: SourceBean, ids: str) -> VodInfo:
     """Fetch the play detail for one or more vod ids."""
+    if _dynamic(source):
+        text = _source_call(source, action="detail", ids=[str(ids)])
+        text = (text or "").strip()
+        if not text:
+            return VodInfo()
+        try:
+            return parse_vod_detail_json(json.loads(text))
+        except Exception:  # noqa: BLE001
+            return VodInfo()
     url = _join(source.api, {"ac": "detail", "ids": ids})
     text = fetch_text(url)
     text = (text or "").strip()
@@ -255,3 +434,63 @@ def resolve_play_url(play_url: str) -> Optional[str]:
         if part.lower().startswith("http"):
             return part
     return None
+
+
+# ---------------- Spider 播放地址 ----------------
+
+def episode_play_id(entry: str) -> str:
+    """Extract the spider play id from an episode entry.
+
+    Spider `vod_play_url` entries look like `第01集$<播放id>`; that id is what
+    `playerContent(flag, id)` expects. Falls back to the whole entry.
+    """
+    entry = (entry or "").strip()
+    if not entry:
+        return ""
+    for sep in ("$", ">"):
+        if sep in entry:
+            tail = entry.rsplit(sep, 1)[1].strip()
+            if tail:
+                return tail
+    return entry
+
+
+def _player_url_from_payload(text: str) -> Optional[str]:
+    """Pull a stream URL out of a spider `playerContent` payload."""
+    text = (text or "").strip()
+    if not text:
+        return None
+    try:
+        data = json.loads(text)
+    except Exception:  # noqa: BLE001
+        return normalize_url(text) if text.lower().startswith("http") else None
+    if not isinstance(data, dict):
+        return None
+    # parse=1 时 `playUrl` 是需要解析器处理的目标；`url` 已是直链。
+    for key in ("url", "playUrl", "play_url"):
+        url = normalize_url(str(data.get(key) or ""))
+        if url.lower().startswith("http"):
+            return url
+    return None
+
+
+def fetch_play_url(source: SourceBean, flag: str, entry: str) -> Optional[str]:
+    """Resolve a playable URL from an episode entry.
+
+    - `type: 1` sources already carry the URL inline.
+    - Spider sources need `playerContent(flag, id)` to turn a play id into a
+      real stream address.
+    """
+    if not _dynamic(source):
+        return resolve_play_url(entry)
+    pid = episode_play_id(entry)
+    if not pid:
+        return None
+    text = _source_call(
+        source,
+        action="player",
+        flag=str(flag or ""),
+        pid=pid,
+        vipFlags=[],
+    )
+    return _player_url_from_payload(text)
