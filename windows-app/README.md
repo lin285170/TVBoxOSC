@@ -19,8 +19,34 @@
 | --- | --- | --- |
 | `type: 1` | JSON / XML 接口源（如 `https://xxx/api.php/provide/vod/`） | ✅ 直接支持 |
 | `type: 3` · `csp_*` | CatVod Java 爬虫（`com.github.catvod.spider.*`，含 XPath 规则源） | ✅ 经内置 JVM 运行时 |
+| `type: 3` · `csp_*` + 配置自带 `spider` | 配置顶层指定专用 `custom_spider.jar` 的源（如 `csp_SP360`） | ✅ 自动下载 + dex2jar 转换后加载 |
 | `type: 3` · `js:*` / `drpy:*` | JS 规则源 | ✅ 经内置 Node 运行时 |
 | 加壳 ARM jar（`*Guard` + `wexguard*.so`） | 私有加固爬虫，字节码被 ARM native 保护 | ❌ 无法在 x86_64 Windows 还原 |
+
+### 配置自带的 `spider` 字段
+
+不少配置（如 `top98.json`）顶层带 `spider` 字段，指向该配置**专用的爬虫 jar**：
+
+```json
+{ "spider": "./jar/top98_1.jar", "sites": [ {"key":"360","api":"csp_SP360","type":3} ] }
+```
+
+这类 jar 实际是 **zip 包着 `classes.dex`**（Android 产物），JVM 无法直接加载，
+且其中的 `SP360` 等类**不存在于任何公开仓库**。桌面版的处理链路：
+
+```
+配置 spider 字段 → 相对配置 URL 解析 → 下载 → 抽取 classes.dex
+                 → dex2jar 转换成 JVM jar → 按 URL 哈希缓存 → 置于 classpath 最前
+```
+
+**classpath 顺序很关键**：不同来源的 `custom_spider.jar` 各自携带一套混淆后的
+公共库（`com.github.catvod.spider.merge.*`），必须让配置自带的这套优先，
+否则会抛 `NoSuchMethodError`。
+
+依赖：应用目录需有 `spider/dex2jar-lib/`（由 `scripts/prepare_runtime.ps1`
+自动下载 dex-tools 获取；本地开发亦可复用 `toolchain/dex-tools-v2.4/lib`）。
+转换产物缓存在 `%USERPROFILE%\.tvbox-win\spider-jar\`。
+
 
 ## 爬虫运行时架构
 
