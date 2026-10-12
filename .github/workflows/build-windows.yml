@@ -2,18 +2,39 @@ name: Build & Release Windows App (tvbox_win)
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Also create a GitHub Release for this run"
+        type: boolean
+        default: false
   push:
     branches: [windows]
     tags:
       - "windows-v*"
 
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: pwsh
+
 jobs:
   build:
     runs-on: windows-latest
-    name: Build TVBoxOSC Windows exe
+    name: Build TVBoxOSC portable + installer
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Resolve app version
+        run: |
+          $ver = "0.0.0-dev"
+          if ($env:GITHUB_REF_TYPE -eq 'tag') {
+            $ver = $env:GITHUB_REF_NAME -replace '^windows-v', ''
+          }
+          "APP_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "APP_VERSION=$ver"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -35,31 +56,91 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install pyinstaller
 
-      - name: Smoke test (import + instantiate)
+      - name: Smoke test (imports resolve)
         working-directory: windows-app
         run: |
           python -c "import tvbox_win, tvbox_win.crawler, tvbox_win.parser, tvbox_win.models, tvbox_win.config, tvbox_win.ui.main_window, tvbox_win.ui.detail_dialog, tvbox_win.ui.player_dialog, tvbox_win.ui.source_dialog; from tvbox_win.ui.main_window import MainWindow; print('IMPORTS_OK')"
 
-      - name: Build exe (PyInstaller)
+      - name: Build app (PyInstaller onedir)
         working-directory: windows-app
         run: |
-          python -m PyInstaller --noconfirm --clean --onefile --windowed ^
-            --name TVBoxOSC ^
-            --collect-all tvbox_win ^
-            --collect-all PySide6 ^
+          python -m PyInstaller --noconfirm --clean --onedir --windowed `
+            --name TVBoxOSC `
+            --icon installer/app.ico `
+            --collect-all tvbox_win `
+            --collect-all PySide6 `
             build_entry.py
+
+      - name: Verify build output
+        working-directory: windows-app
+        run: |
+          if (-not (Test-Path 'dist/TVBoxOSC/TVBoxOSC.exe')) {
+            throw "dist/TVBoxOSC/TVBoxOSC.exe not found"
+          }
+          Get-ChildItem dist/TVBoxOSC | Select-Object Name, Length
+
+      - name: Pack portable zip
+        working-directory: windows-app
+        run: |
+          Compress-Archive -Path 'dist/TVBoxOSC/*' -DestinationPath "dist/TVBoxOSC-${env:APP_VERSION}-windows-x64-portable.zip" -Force
+          Get-Item "dist/TVBoxOSC-${env:APP_VERSION}-windows-x64-portable.zip" | Select-Object Name, Length
+
+      - name: Fetch Simplified Chinese installer language
+        working-directory: windows-app/installer
+        run: |
+          $url = 'https://raw.githubusercontent.com/jrsoftware/issrc/main/Files/Languages/Unofficial/ChineseSimplified.isl'
+          try {
+            Invoke-WebRequest -Uri $url -OutFile 'ChineseSimplified.isl' -UseBasicParsing -ErrorAction Stop
+            Write-Host 'ChineseSimplified.isl downloaded'
+          } catch {
+            Write-Warning "Chinese language file download failed ($($_.Exception.Message)); installer will be English-only"
+          }
+
+      - name: Compile installer (Inno Setup)
+        working-directory: windows-app
+        shell: pwsh
+        run: |
+          $iscc = (Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+                                   "${env:ProgramFiles}\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue |
+                    Select-Object -First 1).FullName
+          if (-not $iscc) {
+            choco install innosetup -y --no-progress
+            $iscc = (Get-ChildItem "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+                                     "${env:ProgramFiles}\Inno Setup 6\ISCC.exe" -ErrorAction SilentlyContinue |
+                      Select-Object -First 1).FullName
+          }
+          if (-not $iscc) { throw "ISCC.exe not found after installing Inno Setup" }
+          Write-Host "Using ISCC: $iscc"
+          & $iscc "/DMyAppVersion=${env:APP_VERSION}" installer/tvbox_win.iss
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup compilation failed with exit code $LASTEXITCODE" }
+          Get-ChildItem installer/output | Select-Object Name, Length
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TVBoxOSC-Windows
-          path: windows-app/dist/TVBoxOSC.exe
+          name: TVBoxOSC-Windows-${{ env.APP_VERSION }}
+          path: |
+            windows-app/dist/*.zip
+            windows-app/installer/output/*.exe
+          if-no-files-found: error
 
-      - name: Create Release (tag only)
-        if: startsWith(github.ref, 'refs/tags/windows-v')
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/windows-v') || (github.event_name == 'workflow_dispatch' && inputs.release == true)
         uses: softprops/action-gh-release@v2
         with:
-          name: TVBoxOSC ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          files: windows-app/dist/TVBoxOSC.exe
+          name: TVBoxOSC ${{ env.APP_VERSION }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('windows-v{0}', env.APP_VERSION) }}
+          files: |
+            windows-app/dist/*.zip
+            windows-app/installer/output/*.exe
+          body: |
+            ## TVBoxOSC for Windows ${{ env.APP_VERSION }}
+
+            ### 安装版 (推荐)
+            - `TVBoxOSC_Setup_${{ env.APP_VERSION }}.exe` — Windows 安装包（Inno Setup），安装到 Program Files，含开始菜单快捷方式与卸载程序，可选桌面图标。
+
+            ### 便携版
+            - `TVBoxOSC-*-portable.zip` — 解压即用，无需安装。
+
+            系统要求：Windows 10/11 x64
           generate_release_notes: true
