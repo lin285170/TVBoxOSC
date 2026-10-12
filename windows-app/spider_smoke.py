@@ -21,6 +21,14 @@ import functools
 import json
 import os
 import sys
+
+# Windows 控制台/CI 的默认编码可能是 cp1252，直接 print 中文会 UnicodeEncodeError
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+except Exception:  # noqa: BLE001
+    pass
+
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 

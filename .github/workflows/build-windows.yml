@@ -22,6 +22,9 @@ defaults:
 env:
   NODE_VERSION: "22.22.2"
   JDK_VERSION: "21"
+  # runner 上 Python 默认 stdout 编码是 cp1252，中文测试输出会 UnicodeEncodeError
+  PYTHONUTF8: "1"
+  PYTHONIOENCODING: "utf-8"
 
 jobs:
   build:
