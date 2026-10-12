@@ -207,7 +207,15 @@ class DetailDialog(QDialog):
 
 
 def _split_label(ep: str) -> str:
+    """Extract the display name from an episode entry.
+
+    TVBox formats: `第01集$https://…` (standard) or `name>https://…` (legacy).
+    """
     ep = (ep or "").strip()
-    if ">" in ep:
-        return ep.split(">", 1)[0].strip()
-    return ep
+    if "$" in ep:
+        head = ep.rsplit("$", 1)[0].strip()
+    elif ">" in ep:
+        head = ep.rsplit(">", 1)[0].strip()
+    else:
+        return ep
+    return head or ep
