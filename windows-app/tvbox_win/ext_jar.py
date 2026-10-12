@@ -18,6 +18,7 @@ import hashlib
 import io
 import logging
 import os
+import re
 import subprocess
 import sys
 import zipfile
@@ -73,20 +74,87 @@ def find_dex2jar_lib() -> Optional[str]:
 def resolve_spider_url(spider: str, config_url: str) -> str:
     """把配置里的 `spider` 值解析成绝对 URL。
 
-    支持：绝对 http(s)、`./rel`、`rel`、以 `/` 开头的站内绝对路径。
-    与 TVBox 行为一致：相对路径基于**配置文件所在的 URL** 解析。
+    TVBox 的 `spider` 字段是**分号分隔的复合串**，常见形式：
+
+        ./jar/top98_1.jar
+        http://xxx/custom_spider.jar
+        http://xxx/xxx.jpg;md5;09c3693dd068fd9b586f45d7d9c71916
+
+    即 `<url>[;md5;<hash>][;...]`，元数据段必须剥离，否则拼出的 URL 无效。
+    相对路径基于**配置文件所在的 URL** 解析（与 TVBox 行为一致）。
     """
     spider = (spider or "").strip()
     if not spider:
         return ""
-    if spider.startswith(("http://", "https://")):
-        return spider
+    # 剥离 `;` 分隔的元数据（md5 校验、大小等）
+    url = spider.split(";", 1)[0].strip()
+    if not url:
+        return ""
+    if url.startswith(("http://", "https://")):
+        return url
     if config_url.startswith(("http://", "https://")):
         from urllib.parse import urljoin
 
-        base = config_url
-        return urljoin(base, spider)
-    return spider
+        return urljoin(config_url, url)
+    return url
+
+
+def is_hardened_zip(raw: bytes) -> Optional[str]:
+    """检测是否为 ARM native 加壳的 spider jar（wexguard 等）。
+
+    这类包典型结构（见 toolchain/guard-analysis）：
+
+        classes.dex                 仅几十 KB 的壳
+        assets/wexguard_v7.so       ELF ARM 32
+        assets/wexguard_v8.so       ELF AArch64
+        assets/wexshinidie.guard    加密的真实字节码（.wexfnw）
+
+    真实逻辑由 ARM native 库在运行时解密，并经 dalvik.system.DexClassLoader
+    动态加载 —— JVM 既无法执行 ARM 代码，也没有 DexClassLoader。
+    命中时返回可读的原因说明，否则返回 None。
+    """
+    if raw[:2] != b"PK":
+        return None
+    try:
+        z = zipfile.ZipFile(io.BytesIO(raw))
+        names = z.namelist()
+    except Exception:  # noqa: BLE001
+        return None
+    lowered = [n.lower() for n in names]
+    so_files = [n for n in names if n.lower().endswith(".so")]
+    guard_payload = [n for n in names if n.lower().endswith((".guard", ".wexfnw"))]
+    if not so_files:
+        return None
+    if not guard_payload and "dexnative" not in "".join(lowered):
+        # 只有 .so 不足以判定，继续按普通包处理
+        pass
+    # 读壳 dex，确认存在 native 解密入口
+    has_dex_native = False
+    try:
+        for n in names:
+            if n.endswith(".dex"):
+                if b"DexNative" in z.read(n):
+                    has_dex_native = True
+                    break
+    except Exception:  # noqa: BLE001
+        pass
+    if not (guard_payload or has_dex_native):
+        return None
+    abis = []
+    for n in so_files:
+        m = re.search(r"(v7|v8|arm64|aarch64|arm|x86_64)", n, re.I)
+        if m:
+            abis.append(m.group(1))
+    detail = "、".join(sorted(set(abis))) or "ARM"
+    return (
+        "该配置使用的是 ARM native 加壳（加固）爬虫包：\n"
+        f"  • 加密载荷：{', '.join(guard_payload) or '（内嵌）'}\n"
+        f"  • native 解密库：{', '.join(so_files)}（{detail}）\n\n"
+        "真实字节码在运行时由 ARM 库解密，并经 Android 的 DexClassLoader 动态加载；"
+        "Windows x86_64 既无法执行 ARM 代码，也没有 DexClassLoader，因此**无法在桌面端运行**。\n"
+        "请在 Android 设备（TVBox 盒子 / 安卓模拟器）上使用该配置，"
+        "或改用公开接口 / XPath 规则源。"
+    )
 
 
 def extract_dex(raw: bytes) -> Optional[bytes]:
@@ -168,40 +236,44 @@ def convert_dex_to_jar(dex_bytes: bytes, out_jar: str, java: Optional[str] = Non
             pass
 
 
-def prepare_ext_jar(spider: str, config_url: str, fetch_bytes) -> Optional[str]:
+def prepare_ext_jar(spider: str, config_url: str, fetch_bytes):
     """下载并转换配置自带的 spider jar。
 
-    :param spider:     配置顶层 `spider` 字段原值
-    :param config_url: 配置文件 URL（用于解析相对路径）
-    :param fetch_bytes: 取字节的回调（由 crawler 提供，复用其会话/超时）
-    :return: 可交给 JVM classpath 的 jar 路径；无法准备时返回 None
+    :return: ``(jar_path, reason)``
+             - 成功：``(路径, None)``
+             - 失败：``(None, 可读原因)``；加固包会给出版本不兼容的明确说明
     """
     url = resolve_spider_url(spider, config_url)
     if not url or not url.startswith(("http://", "https://")):
-        log.info("spider 字段不是可下载 URL，跳过: %r", spider)
-        return None
+        return None, f"spider 字段不是可下载 URL：{spider!r}"
 
     cache = _cache_dir()
     key = hashlib.sha1(url.encode("utf-8")).hexdigest()[:16]
     out_jar = os.path.join(cache, f"{key}.jar")
     if os.path.isfile(out_jar) and os.path.getsize(out_jar) > 0:
         log.info("复用已转换的 spider jar: %s", out_jar)
-        return out_jar
+        return out_jar, None
 
     try:
         raw = fetch_bytes(url)
     except Exception as e:  # noqa: BLE001
         log.warning("下载 spider jar 失败 %s: %s", url, e)
-        return None
+        return None, f"下载 spider jar 失败：{e}"
     if not raw:
-        return None
+        return None, f"spider jar 下载为空：{url}"
+
+    # 先判定是否为 ARM native 加壳包——这类包转换出来也只是空壳，且
+    # 崩溃点会表现为「找不到蜘蛛类」，容易误导，这里直接给出准确原因。
+    hardened = is_hardened_zip(raw)
+    if hardened:
+        log.warning("检测到 ARM native 加壳 spider jar: %s", url)
+        return None, hardened
 
     dex = extract_dex(raw)
     if dex is None:
-        log.warning("spider jar 中未找到 classes.dex: %s", url)
-        return None
+        return None, f"spider jar 中未找到 classes.dex：{url}"
 
     if convert_dex_to_jar(dex, out_jar):
         log.info("spider jar 转换完成: %s (%d 字节)", out_jar, os.path.getsize(out_jar))
-        return out_jar
-    return None
+        return out_jar, None
+    return None, "dex2jar 转换失败（详见日志）"

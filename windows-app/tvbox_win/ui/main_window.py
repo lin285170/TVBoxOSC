@@ -200,6 +200,11 @@ class MainWindow(QMainWindow):
             return
         self._refresh_sources()
         self.statusBar().showMessage(f"加载成功：{len(self.cfg.sources)} 个来源")
+        # 配置自带的 spider jar 若无法在桌面端使用（如 ARM native 加壳），
+        # 立即给出准确原因，避免用户把「找不到蜘蛛类」误当成程序缺陷。
+        reason = crawl.last_spider_reason()
+        if reason:
+            self._show_hint(reason)
         if self.source_combo.count():
             self._on_source_changed()
 

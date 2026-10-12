@@ -136,19 +136,35 @@ def load_config(api_url: str) -> List[SourceBean]:
     return build_sources(cfg)
 
 
+# 最近一次准备 spider jar 的失败原因（用于 UI 提示「该配置为何不可用」）
+_LAST_SPIDER_REASON: Optional[str] = None
+
+
+def last_spider_reason() -> Optional[str]:
+    """返回最近一次 load_config 时 spider jar 准备失败的原因，成功则为 None。"""
+    return _LAST_SPIDER_REASON
+
+
 def prepare_config_spider(cfg: dict, api_url: str) -> Optional[str]:
-    """准备配置自带的 spider jar，并注册到 JVM 运行时。返回产物路径或 None。"""
+    """准备配置自带的 spider jar，并注册到 JVM 运行时。返回产物路径或 None。
+
+    失败原因（尤其是「ARM native 加壳」这类无法在桌面端运行的情况）会记录在
+    `last_spider_reason()` 中，供 UI 给出准确提示。
+    """
+    global _LAST_SPIDER_REASON
     spider = cfg.get("spider") if isinstance(cfg, dict) else None
     runtime = get_runtime()
     if not spider or not isinstance(spider, str):
         # 配置不带 spider：清空外部 jar，回落到内置运行时
+        _LAST_SPIDER_REASON = None
         runtime.set_extra_jars([])
         return None
     try:
-        jar = prepare_ext_jar(spider, api_url, fetch_bytes)
+        jar, reason = prepare_ext_jar(spider, api_url, fetch_bytes)
     except Exception as e:  # noqa: BLE001
         log.warning("准备配置 spider jar 失败: %s", e)
-        jar = None
+        jar, reason = None, f"准备 spider jar 异常：{e}"
+    _LAST_SPIDER_REASON = reason
     runtime.set_extra_jars([jar] if jar else [])
     return jar
 
