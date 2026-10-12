@@ -80,6 +80,40 @@ New-Item -ItemType Directory -Force -Path $spiderDir | Out-Null
 Copy-Item $jarSrc (Join-Path $spiderDir "spider-runtime.jar") -Force
 Info "spider-runtime.jar -> spider/"
 
+# 目录配置自带的 spider jar（custom_spider.jar）是 Android 的 dex，需要
+# dex2jar 在运行时转换成 JVM jar。把 dex2jar 的依赖库一并分发。
+$d2jSrc = Join-Path $App "spider-runtime/dex2jar-lib"
+if (-not (Test-Path $d2jSrc)) {
+  # 本地没有则下载 dex-tools（Apache-2.0），解压出 lib 目录
+  $d2jVersion = "v2.4"
+  $d2jZip = Join-Path $env:TEMP "dex-tools-$d2jVersion.zip"
+  $d2jUrl = "https://github.com/pxb1988/dex2jar/releases/download/$d2jVersion/dex-tools-$d2jVersion.zip"
+  Info "下载 dex2jar $d2jVersion …"
+  try {
+    Invoke-WebRequest -Uri $d2jUrl -OutFile $d2jZip -UseBasicParsing
+    $d2jTmp = Join-Path $env:TEMP "dex-tools-extract-$d2jVersion"
+    if (Test-Path $d2jTmp) { Remove-Item -Recurse -Force $d2jTmp }
+    Expand-Archive -Path $d2jZip -DestinationPath $d2jTmp -Force
+    $lib = Get-ChildItem $d2jTmp -Recurse -Directory -Filter "lib" | Select-Object -First 1
+    if ($lib) {
+      New-Item -ItemType Directory -Force -Path $d2jSrc | Out-Null
+      Copy-Item (Join-Path $lib.FullName "*") $d2jSrc -Recurse -Force
+    }
+    Remove-Item -Recurse -Force $d2jTmp
+  } catch {
+    Write-Warning "dex2jar 获取失败：$_  —— 配置自带 spider jar 的源将无法转换"
+  }
+}
+if (Test-Path $d2jSrc) {
+  $d2jDir = Join-Path $spiderDir "dex2jar-lib"
+  if (Test-Path $d2jDir) { Remove-Item -Recurse -Force $d2jDir }
+  Copy-Item $d2jSrc $d2jDir -Recurse -Force
+  $d2jSize = [math]::Round(((Get-ChildItem $d2jDir -Recurse | Measure-Object Length -Sum).Sum / 1MB), 1)
+  Info "dex2jar-lib -> spider/ （$d2jSize MB）"
+} else {
+  Write-Warning "缺少 dex2jar-lib —— 配置自带 spider jar 的源将无法转换"
+}
+
 # ---------------------------------------------------------------- 3. JS 宿主
 $hostSrc = Join-Path $App "js-runtime/host.js"
 if (-not (Test-Path $hostSrc)) { throw "缺少 $hostSrc" }

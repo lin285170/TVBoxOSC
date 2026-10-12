@@ -111,6 +111,11 @@ class SpiderRuntime:
                  timeout: float = DEFAULT_TIMEOUT):
         self._java = java or find_java()
         self._jar = jar or find_spider_jar()
+        # 外部 spider 实现 jar（来自配置顶层 `spider` 字段，dex2jar 转换产物）。
+        # 这些 jar 必须排在 classpath **最前**——不同来源的 custom_spider.jar
+        # 各自携带一套混淆后的公共库（com.github.catvod.spider.merge.*），
+        # 必须由配置自带的这套优先，否则会 NoSuchMethodError。
+        self._extra_jars: List[str] = []
         self._timeout = timeout
         self._proc: Optional[subprocess.Popen] = None
         self._queue: "queue.Queue[Optional[str]]" = queue.Queue()
@@ -126,6 +131,25 @@ class SpiderRuntime:
     @property
     def jar_path(self) -> Optional[str]:
         return self._jar
+
+    @property
+    def extra_jars(self) -> List[str]:
+        return list(self._extra_jars)
+
+    def set_extra_jars(self, jars: Optional[List[str]]) -> None:
+        """设置外部 spider jar 列表（会重启常驻 JVM 使新的 classpath 生效）。"""
+        new = [p for p in (jars or []) if p and os.path.isfile(p)]
+        if new == self._extra_jars:
+            return
+        self._extra_jars = new
+        # classpath 变化必须重启进程
+        self.close()
+
+    def _classpath(self) -> str:
+        parts = [p for p in self._extra_jars if os.path.isfile(p)]
+        if self._jar:
+            parts.append(self._jar)
+        return os.pathsep.join(parts)
 
     @property
     def available(self) -> bool:
@@ -157,7 +181,7 @@ class SpiderRuntime:
             "-Xms32m",
             "-Xmx512m",
             "-cp",
-            self._jar,
+            self._classpath(),
             MAIN_CLASS,
         ]
         log.info("启动 spider 运行时: %s", " ".join(cmd))

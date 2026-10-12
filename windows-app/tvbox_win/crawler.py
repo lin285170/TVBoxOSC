@@ -37,6 +37,7 @@ from .parser import (
     parse_vod_xml,
 )
 from .js_bridge import JsRuntimeError, get_js_runtime
+from .ext_jar import prepare_ext_jar
 from .spider_bridge import SpiderRuntimeError, get_runtime
 
 log = logging.getLogger(__name__)
@@ -123,10 +124,33 @@ def fetch_bytes(url: str) -> Optional[bytes]:
 # ---------------- 接口配置 ----------------
 
 def load_config(api_url: str) -> List[SourceBean]:
-    """Fetch & parse a top-level 接口配置 into SourceBean objects."""
+    """Fetch & parse a top-level 接口配置 into SourceBean objects.
+
+    配置顶层若带 `spider` 字段（指向该配置专用的 custom_spider.jar），
+    会先把对应的爬虫实现准备好（下载 -> dex2jar -> 注册到 JVM classpath），
+    否则配置里的 `csp_*` 源会因找不到蜘蛛类而全部失败。
+    """
     text = fetch_text(api_url) or ""
     cfg = parse_config_text(text)
+    prepare_config_spider(cfg, api_url)
     return build_sources(cfg)
+
+
+def prepare_config_spider(cfg: dict, api_url: str) -> Optional[str]:
+    """准备配置自带的 spider jar，并注册到 JVM 运行时。返回产物路径或 None。"""
+    spider = cfg.get("spider") if isinstance(cfg, dict) else None
+    runtime = get_runtime()
+    if not spider or not isinstance(spider, str):
+        # 配置不带 spider：清空外部 jar，回落到内置运行时
+        runtime.set_extra_jars([])
+        return None
+    try:
+        jar = prepare_ext_jar(spider, api_url, fetch_bytes)
+    except Exception as e:  # noqa: BLE001
+        log.warning("准备配置 spider jar 失败: %s", e)
+        jar = None
+    runtime.set_extra_jars([jar] if jar else [])
+    return jar
 
 
 # ---------------- Source api (per source) ----------------
