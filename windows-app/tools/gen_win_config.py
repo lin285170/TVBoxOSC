@@ -59,11 +59,17 @@ NICE_NAME = {
     "yyds": "Yyds影视",
 }
 
-# 保底 HTTP 接口源（type 1）
+# 保底 HTTP 接口源（type 1）。
+# 这些是公开的苹果 CMS 采集接口，纯 HTTP 即可直连，不依赖任何爬虫运行时，
+# 用于保证「首次打开就有内容」，不受第三方 XPath 规则过时 / 站点改版影响。
+# 均在 2026-10 实测 `?ac=list&pg=1` 返回真实 JSON（class + 20 条 list）。
+# 已剔除实测失效的 json.heimuer.xyz（Cloudflare 302 挑战页）。
 HTTP_SITES = [
     {"key": "dyttzy", "name": "电影天堂资源", "api": "https://caiji.dyttzyapi.com/api.php/provide/vod/"},
-    {"key": "heimuer", "name": "黑木耳资源", "api": "https://json.heimuer.xyz/api.php/provide/vod/"},
     {"key": "ffzy", "name": "非凡资源", "api": "http://cj.ffzyapi.com/api.php/provide/vod/"},
+    {"key": "lziapi", "name": "量子资源", "api": "https://cj.lziapi.com/api.php/provide/vod/"},
+    {"key": "suoni", "name": "索尼资源", "api": "https://suoniapi.com/api.php/provide/vod/"},
+    {"key": "tyysapi", "name": "天翼资源", "api": "https://tyyszy.com/api.php/provide/vod/"},
 ]
 
 SPIDER_JAR_URL = (

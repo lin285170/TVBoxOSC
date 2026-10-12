@@ -14,18 +14,36 @@
       "filterable": 1
     },
     {
-      "key": "heimuer",
-      "name": "黑木耳资源",
-      "api": "https://json.heimuer.xyz/api.php/provide/vod/",
+      "key": "ffzy",
+      "name": "非凡资源",
+      "api": "http://cj.ffzyapi.com/api.php/provide/vod/",
       "type": 1,
       "searchable": 1,
       "quickSearch": 1,
       "filterable": 1
     },
     {
-      "key": "ffzy",
-      "name": "非凡资源",
-      "api": "http://cj.ffzyapi.com/api.php/provide/vod/",
+      "key": "lziapi",
+      "name": "量子资源",
+      "api": "https://cj.lziapi.com/api.php/provide/vod/",
+      "type": 1,
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "suoni",
+      "name": "索尼资源",
+      "api": "https://suoniapi.com/api.php/provide/vod/",
+      "type": 1,
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 1
+    },
+    {
+      "key": "tyysapi",
+      "name": "天翼资源",
+      "api": "https://tyyszy.com/api.php/provide/vod/",
       "type": 1,
       "searchable": 1,
       "quickSearch": 1,

@@ -318,12 +318,37 @@ def _parse_vod_response(text: Optional[str], page: int = 1) -> VodResult:
     return VodResult(page=page, vods=parse_vod_xml(text))
 
 
-def fetch_home(source: SourceBean, page: int = 1) -> VodResult:
-    """Home page: `?ac=list&pg=N` returns the class list plus newest content."""
+def _fetch_home_raw(source: SourceBean, page: int = 1) -> VodResult:
+    """Raw home request, without the empty-content fallback."""
     if _dynamic(source):
         return _source_result(source, {"action": "home", "filter": True}, page)
     url = _join(source.api, {"ac": "list", "pg": str(page)})
     return _parse_vod_response(fetch_text(url), page)
+
+
+def fetch_home(source: SourceBean, page: int = 1) -> VodResult:
+    """Home page: `?ac=list&pg=N` returns the class list plus newest content.
+
+    第三方 XPath 规则常与站点实际改版脱节：分类导航（cateNode）还匹配得上，
+    首页推荐位（homeVodNode）却已经改结构，结果"有分类、没内容"。此时回落到
+    第一个分类的第 1 页，让界面照样有片子可看，而不是空列表。
+    仅在第 1 页、且首页确实返回了分类时才回落，最多多发一次请求。
+    """
+    result = _fetch_home_raw(source, page)
+    if result.vods or page != 1 or not result.classes:
+        return result
+    tid = (result.classes[0] or {}).get("id")
+    if not tid or str(tid) in ("", "None"):
+        return result
+    try:
+        fallback = fetch_category(source, str(tid), page)
+    except Exception:  # noqa: BLE001 —— 回落失败不影响首页本身的结果
+        return result
+    if not fallback.vods:
+        return result
+    fallback.classes = result.classes
+    fallback.filters = result.filters or fallback.filters
+    return fallback
 
 
 def fetch_category(source: SourceBean, tid: str, page: int = 1) -> VodResult:
