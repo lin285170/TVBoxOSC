@@ -157,7 +157,7 @@ def main():
     r.add("category_snap", cat_snapshot, lambda: True)
     r.add("search", search_action, lambda: idle(w) and w.grid.count() > 0)
     r.add("search_snap", search_snapshot, lambda: True)
-    r.add("csp", csp_action, lambda: w.hint.isVisible() and not w.search_btn.isEnabled())
+    r.add("csp", csp_action, lambda: w.hint.isVisible() and w.grid.count() == 0)
     r.add("csp_snap", csp_snapshot, lambda: True)
     r.add("back", back_action, lambda: idle(w) and w.grid.count() > 0 and w.search_btn.isEnabled())
     r.add("page2", page2_action, lambda: idle(w) and "第 2" in w.page_label.text())
@@ -175,9 +175,10 @@ def main():
         RESULT.get("grid_home", 0) > 0
         and RESULT.get("cats", 0) > 1
         and RESULT.get("grid_search", 0) > 0
+        # csp 源：集成了 JVM 运行时后会被判定为「可支持」，因此导航不再禁用，
+        # 而是真的发起调用并失败 —— 期望表现为「内容为空 + 给出提示」。
         and RESULT.get("csp_grid") == 0
         and RESULT.get("csp_hint_visible") is True
-        and RESULT.get("csp_nav_disabled") is True
         and RESULT.get("page2_items", 0) > 0
     )
     print("总体判定:", "通过" if ok else "未通过")

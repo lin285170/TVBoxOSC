@@ -181,6 +181,8 @@ class MainWindow(QMainWindow):
     def _apply_config(self) -> None:
         if self.cfg.api_url:
             self.api_edit.setText(self.cfg.api_url)
+            # 重启后用缓存的 sources，但配置自带的 spider jar 是进程级状态，需重新挂载
+            self.cfg.restore_spider()
             self._refresh_sources()
             if self.source_combo.count():
                 self._on_source_changed()
@@ -201,10 +203,10 @@ class MainWindow(QMainWindow):
         self._refresh_sources()
         self.statusBar().showMessage(f"加载成功：{len(self.cfg.sources)} 个来源")
         # 配置自带的 spider jar 若无法在桌面端使用（如 ARM native 加壳），
-        # 立即给出准确原因，避免用户把「找不到蜘蛛类」误当成程序缺陷。
+        # 用弹窗明确告知原因——放在触发内容加载之前，避免被"加载失败"提示覆盖。
         reason = crawl.last_spider_reason()
         if reason:
-            self._show_hint(reason)
+            QMessageBox.warning(self, "该配置的爬虫插件无法加载", reason)
         if self.source_combo.count():
             self._on_source_changed()
 

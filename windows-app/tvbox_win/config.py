@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 from .models import SourceBean
 from .parser import build_sources, parse_config_text
-from .crawler import fetch_text
+from .crawler import fetch_text, prepare_config_spider
 
 log = logging.getLogger(__name__)
 
@@ -58,6 +58,7 @@ class ConfigManager:
     def __init__(self) -> None:
         self.api_url: str = ""
         self.sources: List[SourceBean] = []
+        self.spider: str = ""          # 配置顶层 `spider` 字段（配置专用爬虫 jar）
         self._settings: dict = {}
 
     # ---- 持久化 ----
@@ -80,6 +81,7 @@ class ConfigManager:
                 for s in data.get("sources", [])
             ]
             self._settings = data.get("settings", {})
+            self.spider = data.get("spider", "") or ""
             return True
         except Exception as e:  # noqa: BLE001
             log.warning("读取配置失败: %s", e)
@@ -89,6 +91,7 @@ class ConfigManager:
         _ensure_dir()
         data = {
             "api_url": self.api_url,
+            "spider": self.spider,
             "sources": [s.to_dict() for s in self.sources],
             "settings": self._settings,
         }
@@ -101,14 +104,23 @@ class ConfigManager:
 
         Two inputs are accepted:
         1. A TVBox 配置文件 (JSON/XML) containing a non-empty `sites` array.
-        2. A raw JSON/XML 接口地址 (e.g. `https://xxx/api.php/provide/vod/`).
+        2. A raw JSON/XML 接口地址 (e.g. `https://xxx/api.php/provider/vod/`).
            In that case the URL itself becomes a single `type: 1` source.
+
+        Note: UI 走的是本方法（而不是 `crawler.load_config`），因此配置自带的
+        `spider` jar 也必须在这里准备——否则 `csp_*` 源会因插件未挂载而全部失败。
         """
         api_url = (api_url or "").strip()
         text = fetch_text(api_url) or ""
         sources: List[SourceBean] = []
         try:
             cfg = parse_config_text(text)
+            self.spider = str(cfg.get("spider") or "") if isinstance(cfg, dict) else ""
+            # 准备配置顶层 `spider` 指向的爬虫实现（下载 -> dex2jar -> 挂到 JVM）
+            try:
+                prepare_config_spider(cfg, api_url)
+            except Exception as e:  # noqa: BLE001
+                log.warning("准备配置 spider jar 失败: %s", e)
             sources = build_sources(cfg)
         except Exception as e:  # noqa: BLE001
             log.info("按配置文件解析失败，尝试作为单一接口地址处理: %s", e)
@@ -125,6 +137,19 @@ class ConfigManager:
             if s.key == key:
                 return s
         return None
+
+    def restore_spider(self) -> None:
+        """启动时按已保存的 `spider` 字段重新挂载外部爬虫 jar。
+
+        配置的 sources 会被缓存复用（不重新下载），但 `spider` jar 的挂载是
+        进程级状态，重启后必须重做一遍。转换产物有缓存，因此通常很快。
+        """
+        if not self.spider:
+            return
+        try:
+            prepare_config_spider({"spider": self.spider}, self.api_url)
+        except Exception as e:  # noqa: BLE001
+            log.warning("恢复 spider jar 失败: %s", e)
 
     def set_active(self, key: str, active: bool) -> None:
         for s in self.sources:
